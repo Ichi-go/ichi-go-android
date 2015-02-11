@@ -11,7 +11,7 @@ be with.
 
 This project is for the Android mobile Ichi-go client.
 
-[![Build Status](https://travis-ci.org/izzycecil/Ichi-go.svg?branch=master)](https://travis-ci.org/izzycecil/Ichi-go)
+[![Build Status](https://travis-ci.org/Ichi-go/ichi-go-android.svg?branch=master)](https://travis-ci.org/Ichi-go/ichi-go-android)
 
 Build
 -----
