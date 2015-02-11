@@ -12,6 +12,7 @@ be with.
 This project is for the Android mobile Ichi-go client.
 
 [![Build Status](https://travis-ci.org/Ichi-go/ichi-go-android.svg?branch=master)](https://travis-ci.org/Ichi-go/ichi-go-android)
+[![BSD3 License](http://img.shields.io/badge/license-BSD3-brightgreen.svg)](https://tldrlegal.com/license/bsd-3-clause-license-%28revised%29)
 
 Build
 -----
