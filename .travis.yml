@@ -1,0 +1,4 @@
+language: android
+
+notifications:
+    slack: ichi-go:QqmlbblCVTTw11CE8As8dOUs
