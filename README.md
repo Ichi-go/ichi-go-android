@@ -24,7 +24,16 @@ Deploy
 
 Test
 ----
-**No code as of yet**
+
+-Notes-
+
+By default the android emulator does not set a GPS value.
+
+You can set a GPS coordinate by opening the android console and using the 'geo' command. From a terminal command line:
+
+telnet localhost 5554
+
+geo fix <longitude value> <latitude value>
 
 Development
 -----------
