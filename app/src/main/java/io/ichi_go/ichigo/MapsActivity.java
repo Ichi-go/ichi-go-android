@@ -19,19 +19,15 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
 
 
-
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
 
-
-    private GoogleApiClient mGoogleApiClient;
     public static final String TAG = MapsActivity.class.getSimpleName();
-
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
+    private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
 
@@ -68,11 +64,10 @@ public class MapsActivity extends FragmentActivity implements
         super.onPause();
         if (mGoogleApiClient.isConnected()) {
 
-            LocationServices.FusedLocationApi.removeLocationUpdates (mGoogleApiClient,MapsActivity.this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, MapsActivity.this);
             mGoogleApiClient.disconnect();
         }
     }
-
 
 
     /**
@@ -126,10 +121,10 @@ public class MapsActivity extends FragmentActivity implements
         if (location == null) {
             startLocationUpdates();
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-        else {
+        } else {
             handleNewLocation(location);
-        };
+        }
+        ;
 
         Log.i(TAG, "Location services connected.");
     }
