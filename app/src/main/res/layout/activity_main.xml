@@ -1,16 +1,33 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="io.ichi_go.ichigo.MainActivity">
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="io.ichi_go.ichigo.MainActivity">
 
-    <include
-        android:id="@+id/map"
-        layout="@layout/activity_maps" />
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
+        <include
+            android:id="@+id/map"
+            layout="@layout/activity_maps" />
+
+    </RelativeLayout>
+
+    <fragment
+        android:id="@+id/fragment_navigation_drawer"
+        android:name="io.ichi_go.ichigo.NavigationDrawerFragment"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:layout="@layout/fragment_navigation_drawer"
+        tools:layout="@layout/fragment_navigation_drawer" />
+</android.support.v4.widget.DrawerLayout>
 
 
-</RelativeLayout>
