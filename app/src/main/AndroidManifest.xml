@@ -41,6 +41,7 @@
         <activity
             android:name=".NewEventActivity"
             android:label="@string/title_activity_new_event" >
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".MainActivity"/>
         </activity>
     </application>
 
