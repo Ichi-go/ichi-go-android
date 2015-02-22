@@ -18,8 +18,10 @@ import java.util.List;
 public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.MyViewHolder> {
     private LayoutInflater inflater;
     List<NavItem> data = Collections.emptyList();
+    private Context context;
 
     public NavDrawerAdapter(Context context, List<NavItem> data){
+        this.context = context;
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -43,7 +45,7 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.MyVi
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder{
         TextView title;
         ImageView icon;
         public MyViewHolder(View itemView) {
