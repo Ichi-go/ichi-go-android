@@ -4,8 +4,10 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class NewEventActivity extends ActionBarActivity {
@@ -20,7 +22,6 @@ public class NewEventActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,4 +48,13 @@ public class NewEventActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void createEvent(View v) {
+        if(v.getId() == R.id.create_event_button) {
+            Log.d("NewEvent","A new event was created");
+            NavUtils.navigateUpFromSameTask(this);
+        }
+    }
+
+
 }
