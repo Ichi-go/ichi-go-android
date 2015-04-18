@@ -1,5 +1,6 @@
 package io.ichi_go.ichigo;
 
+import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,6 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.maps.model.LatLng;
+
+import static io.ichi_go.ichigo.R.id.event_description;
+import static io.ichi_go.ichigo.R.id.event_name;
 
 
 public class NewEventActivity extends ActionBarActivity {
@@ -51,8 +60,54 @@ public class NewEventActivity extends ActionBarActivity {
 
     public void createEvent(View v) {
         if(v.getId() == R.id.create_event_button) {
-            Log.d("NewEvent","A new event was created");
-            NavUtils.navigateUpFromSameTask(this);
+
+            YoYo.with(Techniques.RotateOut)
+                    .duration(700)
+                    .playOn(findViewById(R.id.create_event_button));
+
+
+            final ActionBarActivity itself = this;
+
+
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(700);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            EditText etName = (EditText) findViewById(event_name);
+                            EditText etDes = (EditText) findViewById(event_description);
+                            String eName = String.valueOf(etName.getText());
+                            String eDes = String.valueOf(etDes.getText());
+
+                            LatLng latLng = currentLocation.getLatLng();
+
+                            SQLdb entry = new SQLdb(NewEventActivity.this);
+                            entry.open();
+                            entry.createEntry(eName, eDes, currentLocation.getLatitude(),currentLocation.getLongitude());
+                            entry.close();
+
+                            Log.d("NewEvent","A new event was created");
+                            Log.d("NewEvent","A new event was created");
+                            Log.d("NewEvent","A new event was created");
+                            NavUtils.navigateUpFromSameTask(itself);
+
+                        }
+                    });
+                }
+
+            }).start();
+
+
+
+
         }
     }
 

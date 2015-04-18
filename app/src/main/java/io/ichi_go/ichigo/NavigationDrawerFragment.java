@@ -17,6 +17,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.app.Activity;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +59,11 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
         // Inflate the layout for this fragment
-        View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        final View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawer_list);
         adapter = new NavDrawerAdapter(getActivity(), getData());
         recyclerView.setAdapter(adapter);
@@ -64,9 +72,78 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 if(position == 0){
-                    startActivity(new Intent(getActivity(), NewEventActivity.class));
+
+                    YoYo.with(Techniques.Tada)
+                            .duration(700)
+                            .playOn(layout.findViewById(R.id.drawer_list));
+
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(700);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(getActivity(), NewEventActivity.class));
+                                }
+                            });
+                        }
+
+                    }).start();
+
+
+
+
                 }
+                if(position == 1){
+
+
+                    YoYo.with(Techniques.Tada)
+                            .duration(700)
+                            .playOn(layout.findViewById(R.id.drawer_list));
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(700);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(getActivity(), MyEventsActivity2.class));
+                                }
+                            });
+                        }
+
+                    }).start();
+
+
+
+
+                }
+
+                if(position == 2 || position == 3){
+
+
+                    YoYo.with(Techniques.Tada)
+                            .duration(700)
+                            .playOn(layout.findViewById(R.id.drawer_list));
+
+
+
+                }
+
             }
+
+
 
             @Override
             public void onLongClick(View view, int position) {
@@ -76,9 +153,10 @@ public class NavigationDrawerFragment extends Fragment {
         return layout;
     }
 
+
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "Test 1", "Test 2", "Test 3"};
+        String[] titles = {"New Event", "My Events", "Test 2", "Test 3"};
         for (int i = 0; i < titles.length; i++) {
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;

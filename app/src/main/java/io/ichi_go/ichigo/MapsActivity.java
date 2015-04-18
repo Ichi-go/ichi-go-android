@@ -17,14 +17,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
-
+import com.google.android.gms.location.places.Places;
 
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-
+    public static LatLng latLng;
     public static final String TAG = MapsActivity.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
@@ -42,6 +42,8 @@ public class MapsActivity extends FragmentActivity implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
                 .build();
 
         // Create the LocationRequest object
@@ -159,12 +161,20 @@ public class MapsActivity extends FragmentActivity implements
         double currentLongitude = location.getLongitude();
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
+        currentLocation.setLatLng(latLng);
+
+
+        Log.d("Maps", "current location set");
+        Log.d("Maps","current location set");
+        Log.d("Maps","current location set");
+
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
                 .title("I am here!");
         mMap.addMarker(options);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
+
 
     @Override
     public void onLocationChanged(Location location) {
