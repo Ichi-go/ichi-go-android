@@ -17,6 +17,8 @@ public class currentLocation {
     private static String latitude = formatter.format(35.1107);
     private static String longitude = formatter.format(106.6100);
 
+    private static String location = "";
+
     public static LatLng getLatLng() {
         return latLng;
     }
@@ -44,5 +46,13 @@ public class currentLocation {
 
     public static void setLongitude(Double longitude) {
         currentLocation.longitude = formatter.format(longitude);
+    }
+
+    public static String getLocation() {
+        return location;
+    }
+
+    public static void setLocation(String location) {
+        currentLocation.location = location;
     }
 }

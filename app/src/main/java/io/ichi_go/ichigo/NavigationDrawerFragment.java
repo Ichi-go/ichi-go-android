@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -41,6 +42,8 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
     private View containerView;
+    public static ArrayList<Event> biblio = new ArrayList<Event>();
+    private int menuflag = 0;
 
     public NavigationDrawerFragment() {
         // Required empty public constructor
@@ -61,6 +64,12 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
+        final LayoutInflater inflater2 = inflater;
+        final ViewGroup container2 = container;
+        final Bundle savedInstanceState2 = savedInstanceState;
+        menuflag = 0;
+
+        getData2(getActivity());
 
         // Inflate the layout for this fragment
         final View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
@@ -71,75 +80,182 @@ public class NavigationDrawerFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                if(position == 0){
 
-                    YoYo.with(Techniques.Tada)
-                            .duration(700)
-                            .playOn(layout.findViewById(R.id.drawer_list));
+if(menuflag == 0) {
+    if (position == 0) {
 
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(700);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(getActivity(), NewEventActivity.class));
-                                }
-                            });
-                        }
-
-                    }).start();
+        YoYo.with(Techniques.Tada)
+                .duration(700)
+                .playOn(layout.findViewById(R.id.drawer_list));
 
 
-
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                if(position == 1){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getActivity(), NewEventActivity.class));
+                    }
+                });
+            }
+
+        }).start();
 
 
-                    YoYo.with(Techniques.Tada)
-                            .duration(700)
-                            .playOn(layout.findViewById(R.id.drawer_list));
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(700);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(getActivity(), MyEventsActivity2.class));
-                                }
-                            });
-                        }
-
-                    }).start();
+    }
+    if (position == 1) {
 
 
+        YoYo.with(Techniques.Tada)
+                .duration(700)
+                .playOn(layout.findViewById(R.id.drawer_list));
 
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getActivity(), MyEventsActivity2.class));
+                    }
+                });
+            }
 
-                if(position == 2 || position == 3){
+        }).start();
 
 
-                    YoYo.with(Techniques.Tada)
-                            .duration(700)
-                            .playOn(layout.findViewById(R.id.drawer_list));
+    }
 
+    if (position == 2) {
 
+        menuflag = 1;
 
+        YoYo.with(Techniques.Tada)
+                .duration(700)
+                .playOn(layout.findViewById(R.id.drawer_list));
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        // startActivity(new Intent(getActivity(), MainMyEventsActivity.class));
+                        //onCreateView2(inflater2,container2,savedInstanceState2);
+                        adapter = new NavDrawerAdapter(getActivity(), getData2(getActivity()));
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+//                        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
+//                            @Override
+//                            public void onClick(View view, int position) {
+//
+//
+//                                YoYo.with(Techniques.Tada)
+//                                        .duration(700)
+//                                        .playOn(layout.findViewById(R.id.drawer_list));
+//
+//                                displayEvent.setName(biblio.get(position).getName());
+//                                displayEvent.setDesciption(biblio.get(position).getDescription());
+//
+//
+//                                new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        try {
+//                                            Thread.sleep(700);
+//                                        } catch (InterruptedException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                        getActivity().runOnUiThread(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                startActivity(new Intent(getActivity(), DisplayEventActivity.class));
+//                                            }
+//                                        });
+//                                    }
+//
+//                                }).start();
+//
+//
+//                            }
+//
+//
+//                            @Override
+//                            public void onLongClick(View view, int position) {
+//
+//                            }
+//                        }));
+
+                        Log.d("MyEvent", "MyEvents View selected");
+                        Log.d("MyEvent", "MyEvents View selected");
+                        Log.d("MyEvent", "MyEvents View selected");
+
+                    }
+                });
+            }
+
+        }).start();
+
+    }
+
+
+    if (position == 3) {
+
+
+        YoYo.with(Techniques.Tada)
+                .duration(700)
+                .playOn(layout.findViewById(R.id.drawer_list));
+
+
+    }
+
+}else {
+
+    YoYo.with(Techniques.Tada)
+            .duration(700)
+            .playOn(layout.findViewById(R.id.drawer_list));
+
+    displayEvent.setName(biblio.get(position).getName());
+    displayEvent.setDesciption(biblio.get(position).getDescription());
+
+
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(700);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(getActivity(), DisplayEventActivity.class));
+                }
+            });
+        }
+
+    }).start();
+
+}
 
             }
 
@@ -154,9 +270,69 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
 
+
+    public View onCreateView2(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        Log.d("MyEvent","onCreateView2");
+        Log.d("MyEvent","onCreateView2");
+        Log.d("MyEvent","onCreateView2");
+
+
+
+        // Inflate the layout for this fragment
+        final View layout = inflater.inflate(R.layout.fragment_my_events3, container, false);
+        recyclerView = (RecyclerView) layout.findViewById(R.id.drawer_list);
+        adapter = new NavDrawerAdapter(getActivity(), getData2(getActivity()));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+
+                YoYo.with(Techniques.Tada)
+                        .duration(700)
+                        .playOn(layout.findViewById(R.id.drawer_list));
+
+                displayEvent.setName(biblio.get(position).getName());
+                displayEvent.setDesciption(biblio.get(position).getDescription());
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(700);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(getActivity(), DisplayEventActivity.class));
+                            }
+                        });
+                    }
+
+                }).start();
+
+
+
+            }
+
+
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+        return layout;
+    }
+
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "My Events", "Test 2", "Test 3"};
+        String[] titles = {"New Event", "My Events 2", "My Events 3", "Test 4"};
         for (int i = 0; i < titles.length; i++) {
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;
@@ -165,6 +341,63 @@ public class NavigationDrawerFragment extends Fragment {
         }
         return data;
     }
+
+
+    public static List<NavItem> getData2( Context itself) {
+
+
+        List<NavItem> data = new ArrayList<>();
+
+
+        SQLdb info = new SQLdb(itself);
+        info.open();
+
+        ArrayList<Event> biblio2 = info.getData2();
+
+        info.dumpDB();
+
+        if(UpdateFlag.getUpdate() == 1) {
+            info.initDB();
+        }
+
+        info.populate();
+
+        info.close();
+
+
+        if(!biblio.equals(biblio2)){
+
+            biblio = biblio2;
+        }
+
+
+        Event sco2;
+        String name;
+
+        int len1 = 8;
+        int len2 = 8;
+
+        for (int i = 0; i < biblio.size(); i++) {
+            sco2 = biblio.get(i);
+            if(sco2.getName().length() < 8){
+                len1 = sco2.getName().length();
+            }
+            if(sco2.getDescription().length() < 8){
+                len2 = sco2.getDescription().length();
+            }
+            name = String.format("%15s", sco2.getName().substring(0,len1));
+
+            NavItem current = new NavItem();
+            current.iconId = R.drawable.ic_launcher_strawberry;
+            current.title = name;
+            data.add(current);
+
+        }
+
+
+        return data;
+    }
+
 
 
     public void setUp(int fragmentID, DrawerLayout drawerLayout, Toolbar toolbar) {

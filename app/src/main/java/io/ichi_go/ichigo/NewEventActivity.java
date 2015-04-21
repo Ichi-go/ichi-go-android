@@ -91,7 +91,7 @@ public class NewEventActivity extends ActionBarActivity {
 
                             SQLdb entry = new SQLdb(NewEventActivity.this);
                             entry.open();
-                            entry.createEntry(eName, eDes, currentLocation.getLatitude(),currentLocation.getLongitude());
+                            entry.createEntry(eName, eDes, currentLocation.getLatitude(),currentLocation.getLongitude(), currentLocation.getLocation());
                             entry.close();
 
                             Log.d("NewEvent","A new event was created");

@@ -19,6 +19,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.places.Places;
 
+import java.util.ArrayList;
+
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -52,6 +54,16 @@ public class MapsActivity extends FragmentActivity implements
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
+        SQLdb info = new SQLdb(this);
+        info.open();
+        info.dumpDB();
+        info.initDB();
+        info.populate();
+        info.close();
+        Log.d("DB","Update DB");
+        Log.d("DB","Update DB");
+        Log.d("DB","Update DB");
+
     }
 
     @Override
@@ -59,6 +71,18 @@ public class MapsActivity extends FragmentActivity implements
         super.onResume();
         setUpMapIfNeeded();
         mGoogleApiClient.connect();
+
+        SQLdb info = new SQLdb(this);
+        info.open();
+        info.dumpDB();
+        info.initDB();
+        info.populate();
+        info.close();
+        Log.d("DB","Update DB");
+        Log.d("DB","Update DB");
+        Log.d("DB","Update DB");
+
+
     }
 
     @Override
@@ -129,6 +153,18 @@ public class MapsActivity extends FragmentActivity implements
         ;
 
         Log.i(TAG, "Location services connected.");
+
+
+        SQLdb info = new SQLdb(this);
+        info.open();
+        info.dumpDB();
+        info.initDB();
+        info.populate();
+        info.close();
+        Log.d("DB","Update DB");
+        Log.d("DB","Update DB");
+        Log.d("DB","Update DB");
+
     }
 
     protected void startLocationUpdates() {

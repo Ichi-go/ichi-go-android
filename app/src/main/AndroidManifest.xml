@@ -39,8 +39,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MainMyEventsActivity"
+            android:label="@string/title_activity_main_my_events" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".NewEventActivity"
             android:label="@string/title_activity_new_event" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".DisplayEventActivity"
+            android:label="@string/title_activity_display_event" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -52,7 +66,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
+        <activity
+            android:name=".JsonParseActivity"
+            android:label="@string/title_activity_json_parse" >
+        </activity>
     </application>
 
 </manifest>

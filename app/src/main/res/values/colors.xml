@@ -10,4 +10,7 @@
     <color name="colorDivider">#B6B6B6</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="mention_color">#21a5b8</color>
+    <color name="hashtag_color">#e45555</color>
 </resources>
