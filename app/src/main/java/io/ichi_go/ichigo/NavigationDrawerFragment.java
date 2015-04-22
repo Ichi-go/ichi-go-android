@@ -134,7 +134,7 @@ if(menuflag == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(getActivity(), MyEventsActivity2.class));
+                        startActivity(new Intent(getActivity(), AddressActivity.class));
                     }
                 });
             }
@@ -339,7 +339,7 @@ if(menuflag == 0) {
 
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "My Events 2", "My Events 3", "Test 4"};
+        String[] titles = {"New Event", "Address", "My Events 3", "Test 4"};
         for (int i = 0; i < titles.length; i++) {
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;

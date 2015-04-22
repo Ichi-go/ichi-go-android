@@ -5,34 +5,38 @@
 
     tools:context="io.ichi_go.ichigo.NavigationDrawerFragment">
 
+    <include
+        android:id="@+id/app_bar_space"
+        layout="@layout/app_bar_space" />
 
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="fill_parent"
-        android:layout_below="@id/app_bar"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/image_placeholder"
-        android:layout_below="@id/progressBar"
+        android:layout_below="@id/app_bar_space"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:src="@drawable/ratio16x9"
         android:visibility="visible" />
 
-    <android.support.v7.widget.RecyclerView
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_below="@id/image_placeholder"
-        android:id="@+id/drawer_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible">
+        android:background="#EEE"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@id/image_placeholder"
+            android:id="@+id/drawer_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
 
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
 
 
 </RelativeLayout>

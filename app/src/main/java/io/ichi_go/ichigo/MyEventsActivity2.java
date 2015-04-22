@@ -65,26 +65,26 @@ public class MyEventsActivity2 extends ActionBarActivity {
         setThreadPolicy(policy);
 
 
-        String input = readCentral();
-        try {
-
-            //JsonReader jsonReader = Json.createReader(input);
-            JSONArray array = new JSONArray(input);
-
-            Log.i(JsonParseActivity.class.getName(), array.toString());
-
-            String data = array.getJSONObject(3).toString();
-            tv.setText(data);
-
-            System.out.println(array.getJSONObject(3).getString("latitude"));
-            System.out.println("latitude");
-            System.out.println("latitude");
-            System.out.println("latitude");
-
-
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        }
+//        String input = readCentral();
+//        try {
+//
+//            //JsonReader jsonReader = Json.createReader(input);
+//            JSONArray array = new JSONArray(input);
+//
+//            Log.i(JsonParseActivity.class.getName(), array.toString());
+//
+//            String data = array.getJSONObject(3).toString();
+//            tv.setText(data);
+//
+//            System.out.println(array.getJSONObject(3).getString("latitude"));
+//            System.out.println("latitude");
+//            System.out.println("latitude");
+//            System.out.println("latitude");
+//
+//
+//        } catch (JSONException e1) {
+//            e1.printStackTrace();
+//        }
 
 
     }

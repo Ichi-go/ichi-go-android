@@ -9,13 +9,15 @@ import java.text.DecimalFormat;
  */
 public class currentLocation {
 
+
+    private static String name = "Albuquerque stuffs";
     private static String data;
     private static LatLng latLng;
 
     private static DecimalFormat formatter = new DecimalFormat("000.0000");
 
     private static String latitude = formatter.format(35.1107);
-    private static String longitude = formatter.format(106.6100);
+    private static String longitude = formatter.format(-106.6100);
 
     private static String location = "";
 
@@ -54,5 +56,13 @@ public class currentLocation {
 
     public static void setLocation(String location) {
         currentLocation.location = location;
+    }
+
+    public static String getName() {
+        return name;
+    }
+
+    public static void setName(String name) {
+        currentLocation.name = name;
     }
 }

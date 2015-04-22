@@ -23,6 +23,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.places.Places;
 
+
 import java.util.ArrayList;
 
 public class MapsActivity extends ActionBarActivity implements
@@ -185,6 +186,11 @@ public class MapsActivity extends ActionBarActivity implements
      */
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        Double lat = new Double(currentLocation.getLatitude());
+        Double lon = new Double(currentLocation.getLongitude());
+        String name = currentLocation.getName();
+        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(name));
+
     }
 
     @Override
