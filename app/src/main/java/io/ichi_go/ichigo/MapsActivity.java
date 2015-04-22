@@ -4,7 +4,11 @@ import android.content.IntentSender;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
@@ -21,7 +25,7 @@ import com.google.android.gms.location.places.Places;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements
+public class MapsActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -32,13 +36,15 @@ public class MapsActivity extends FragmentActivity implements
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
+    private android.support.v7.widget.Toolbar toolbar;
+
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_maps2);
         setUpMapIfNeeded();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -57,14 +63,55 @@ public class MapsActivity extends FragmentActivity implements
         SQLdb info = new SQLdb(this);
         info.open();
         info.dumpDB();
-        info.initDB();
-        info.populate();
+//        info.initDB();
+//        info.populate();
         info.close();
         Log.d("DB","Update DB");
         Log.d("DB","Update DB");
         Log.d("DB","Update DB");
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        int opt;
+        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        opt = getSupportActionBar().getDisplayOptions();
+        Log.d("Maps","onStart");
+        Log.d("Maps","onStart");
+        Log.d("Maps","onStart");
+        System.out.println(opt);
+        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_maps, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onResume() {
@@ -75,8 +122,8 @@ public class MapsActivity extends FragmentActivity implements
         SQLdb info = new SQLdb(this);
         info.open();
         info.dumpDB();
-        info.initDB();
-        info.populate();
+//        info.initDB();
+//        info.populate();
         info.close();
         Log.d("DB","Update DB");
         Log.d("DB","Update DB");
@@ -158,8 +205,8 @@ public class MapsActivity extends FragmentActivity implements
         SQLdb info = new SQLdb(this);
         info.open();
         info.dumpDB();
-        info.initDB();
-        info.populate();
+//        info.initDB();
+//        info.populate();
         info.close();
         Log.d("DB","Update DB");
         Log.d("DB","Update DB");

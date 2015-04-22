@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,8 @@ public class NavigationDrawerFragment extends Fragment {
     public static ArrayList<Event> biblio = new ArrayList<Event>();
     private int menuflag = 0;
 
+    private android.support.v7.widget.Toolbar toolbar2;
+
     public NavigationDrawerFragment() {
         // Required empty public constructor
     }
@@ -57,6 +60,8 @@ public class NavigationDrawerFragment extends Fragment {
         if (savedInstanceState != null) {
             mFromSavedInstanceState = true;
         }
+
+
     }
 
     @Override
@@ -73,6 +78,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         // Inflate the layout for this fragment
         final View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+
+
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawer_list);
         adapter = new NavDrawerAdapter(getActivity(), getData());
         recyclerView.setAdapter(adapter);
@@ -356,11 +363,11 @@ if(menuflag == 0) {
 
         info.dumpDB();
 
-        if(UpdateFlag.getUpdate() == 1) {
-            info.initDB();
-        }
-
-        info.populate();
+//        if(UpdateFlag.getUpdate() == 1) {
+//            info.initDB();
+//        }
+//
+//        info.populate();
 
         info.close();
 
@@ -374,17 +381,16 @@ if(menuflag == 0) {
         Event sco2;
         String name;
 
-        int len1 = 8;
-        int len2 = 8;
+        int len1 = 14;
+
 
         for (int i = 0; i < biblio.size(); i++) {
+            len1 = 14;
             sco2 = biblio.get(i);
-            if(sco2.getName().length() < 8){
+            if(sco2.getName().length() < len1){
                 len1 = sco2.getName().length();
             }
-            if(sco2.getDescription().length() < 8){
-                len2 = sco2.getDescription().length();
-            }
+
             name = String.format("%15s", sco2.getName().substring(0,len1));
 
             NavItem current = new NavItem();
@@ -403,7 +409,10 @@ if(menuflag == 0) {
     public void setUp(int fragmentID, DrawerLayout drawerLayout, Toolbar toolbar) {
         containerView = getActivity().findViewById(fragmentID);
         mDrawerLayout = drawerLayout;
-        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+        toolbar2 = toolbar;
+
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar2, R.string.drawer_open, R.string.drawer_close) {
+           // mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -411,6 +420,20 @@ if(menuflag == 0) {
                     mUserLearnedDrawer = true;
                     saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
                 }
+
+                        Activity activity123 = getActivity();
+
+        if(activity123 instanceof ActionBarActivity) {
+            //Toolbar toolbar = (Toolbar) drawerView.findViewById(R.id.app_bar);
+            //((ActionBarActivity) activity123).setSupportActionBar(toolbar2);
+            //((ActionBarActivity) activity123).getSupportActionBar().setDisplayShowHomeEnabled(true);
+            ((ActionBarActivity) activity123).getSupportActionBar().show();
+//            ((ActionBarActivity) activity123).getSupportActionBar().setHomeButtonEnabled(true);
+//            ((ActionBarActivity) activity123).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+                Log.d("Drawer","onDrawerOpened");
+                Log.d("Drawer","onDrawerOpened");
+                Log.d("Drawer","onDrawerOpened");
                 getActivity().invalidateOptionsMenu();
             }
 
@@ -419,8 +442,48 @@ if(menuflag == 0) {
                 super.onDrawerClosed(drawerView);
                 getActivity().invalidateOptionsMenu();
 
+                Activity activity123 = getActivity();
+
+                if(activity123 instanceof ActionBarActivity) {
+                    //Toolbar toolbar = (Toolbar) drawerView.findViewById(R.id.app_bar);
+                    //((ActionBarActivity) activity123).setSupportActionBar(toolbar2);
+//                    ((ActionBarActivity) activity123).getSupportActionBar().setHomeAsUpIndicator(null);
+                    int opt;
+                    opt = ((ActionBarActivity) activity123).getSupportActionBar().getDisplayOptions();
+                    System.out.println(opt);
+//                    ((ActionBarActivity) activity123).getSupportActionBar().setHomeButtonEnabled(false);
+//                    ((ActionBarActivity) activity123).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//                    ((ActionBarActivity) activity123).getSupportActionBar().setHomeButtonEnabled(true);
+//                    ((ActionBarActivity) activity123).getSupportActionBar().setDisplayShowHomeEnabled(true);
+//                    ((ActionBarActivity) activity123).getSupportActionBar().setDisplayOptions(11);
+                    opt = ((ActionBarActivity) activity123).getSupportActionBar().getDisplayOptions();
+                    System.out.println(opt);
+
+                }
+                Log.d("Drawer","onDrawerClosed");
+                Log.d("Drawer","onDrawerClosed");
+                Log.d("Drawer","onDrawerClosed");
+
             }
         };
+
+//        Activity activity123 = getActivity();
+//
+//        if(activity123 instanceof ActionBarActivity) {
+//            Toolbar toolbar2 = (Toolbar) drawerLayout.findViewById(R.id.app_bar);
+//
+//            ((ActionBarActivity) activity123).setSupportActionBar(toolbar2);
+//            //((ActionBarActivity) activity123).getSupportActionBar().setDisplayShowHomeEnabled(true);
+//            ((ActionBarActivity) activity123).getSupportActionBar().setHomeButtonEnabled(true);
+//            ((ActionBarActivity) activity123).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
+
+//        toolbar = (android.support.v7.widget.Toolbar) drawerLayout.findViewById(R.id.app_bar);
+//        getActivity().setSupportActionBar(toolbar);
+//        getActivity().getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             mDrawerLayout.openDrawer(containerView);
         }
