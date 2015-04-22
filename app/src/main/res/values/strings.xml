@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">IchiGo</string>
-    <string name="title_activity_maps">Ichi go</string>
+    <string name="google_maps_key_debug">AIzaSyAw-ryYtUAa2gNpMvAcINhzRVwRHsO1ymY</string>
+    <string name="app_name">Ichi-go</string>
     <string name="title_activity_main">Ichi-go</string>
     <string name="title_activity_new_event">Create New Event</string>
     <string name="action_settings">Settings</string>
