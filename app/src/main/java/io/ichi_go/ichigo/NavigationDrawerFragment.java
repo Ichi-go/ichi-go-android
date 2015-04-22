@@ -78,7 +78,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "Test 1", "Test 2", "Test 3"};
+        String[] titles = {"Create Event", "My Events", "Friends", "Profile", "General", "Help & Feedback", "Settings"};
         for (int i = 0; i < titles.length; i++) {
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;
