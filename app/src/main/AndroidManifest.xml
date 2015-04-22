@@ -28,15 +28,15 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
         </activity>
         <activity
             android:name=".MainMyEventsActivity"
@@ -67,8 +67,8 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".JsonParseActivity"
-            android:label="@string/title_activity_json_parse" >
+            android:name=".MainActivity2Activity"
+            android:label="@string/title_activity_main_activity2" >
         </activity>
     </application>
 

@@ -41,7 +41,8 @@ public class Event implements Comparable<Event> {
     }
 
     public void setName(String name) {
-        this.name = String.format("%10s",name);
+        this.name = name;
+                //= String.format("%10s",name);
     }
 
     public String getDescription() {
@@ -49,7 +50,8 @@ public class Event implements Comparable<Event> {
     }
 
     public void setDescription(String description) {
-        this.description = String.format("%10s",description);
+        this.description = description;
+                //= String.format("%10s",description);
     }
 
     public LatLng getLatLng() {

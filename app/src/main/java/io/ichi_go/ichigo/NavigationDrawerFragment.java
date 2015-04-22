@@ -1,489 +1,282 @@
 package io.ichi_go.ichigo;
 
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.GestureDetector;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.app.Activity;
-
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment used for managing interactions for and presentation of a navigation drawer.
+ * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
+ * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    public static final String PREF_FILE_NAME = "testpref";
-    public static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
+    /**
+     * Remember the position of the selected item.
+     */
+    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+
+    /**
+     * Per the design guidelines, you should show the drawer on launch until the user manually
+     * expands it. This shared preference tracks this.
+     */
+    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
+
+    /**
+     * A pointer to the current callbacks instance (the Activity).
+     */
+    private NavigationDrawerCallbacks mCallbacks;
+
+    /**
+     * Helper component that ties the action bar to the navigation drawer.
+     */
     private ActionBarDrawerToggle mDrawerToggle;
+
     private DrawerLayout mDrawerLayout;
-    private NavDrawerAdapter adapter;
-    private boolean mUserLearnedDrawer;
+    private ListView mDrawerListView;
+    private View mFragmentContainerView;
+
+    private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
-    private View containerView;
-    public static ArrayList<Event> biblio = new ArrayList<Event>();
-    private int menuflag = 0;
+    private boolean mUserLearnedDrawer;
 
     public NavigationDrawerFragment() {
-        // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLearnedDrawer = Boolean.valueOf(readFromPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, "false"));
+
+        // Read in the flag indicating whether or not the user has demonstrated awareness of the
+        // drawer. See PREF_USER_LEARNED_DRAWER for details.
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+
         if (savedInstanceState != null) {
+            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
+
+        // Select either the default item (0) or the last selected item.
+        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-
-        final LayoutInflater inflater2 = inflater;
-        final ViewGroup container2 = container;
-        final Bundle savedInstanceState2 = savedInstanceState;
-        menuflag = 0;
-
-        getData2(getActivity());
-
-        // Inflate the layout for this fragment
-        final View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        recyclerView = (RecyclerView) layout.findViewById(R.id.drawer_list);
-        adapter = new NavDrawerAdapter(getActivity(), getData());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-
-if(menuflag == 0) {
-    if (position == 0) {
-
-        YoYo.with(Techniques.Tada)
-                .duration(700)
-                .playOn(layout.findViewById(R.id.drawer_list));
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(700);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(getActivity(), NewEventActivity.class));
-                    }
-                });
-            }
-
-        }).start();
-
-
-    }
-    if (position == 1) {
-
-
-        YoYo.with(Techniques.Tada)
-                .duration(700)
-                .playOn(layout.findViewById(R.id.drawer_list));
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(700);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(getActivity(), MyEventsActivity2.class));
-                    }
-                });
-            }
-
-        }).start();
-
-
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Indicate that this fragment would like to influence the set of actions in the action bar.
+        setHasOptionsMenu(true);
     }
 
-    if (position == 2) {
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        mDrawerListView = (ListView) inflater.inflate(
+//                R.layout.fragment_navigation_drawer2, container, false);
+//        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                selectItem(position);
+//            }
+//        });
+//        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+//                getActionBar().getThemedContext(),
+//                android.R.layout.simple_list_item_activated_1,
+//                android.R.id.text1,
+//                new String[]{
+//                        getString(R.string.title_section1),
+//                        getString(R.string.title_section2),
+//                        getString(R.string.title_section3),
+//                }));
+//        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+//        return mDrawerListView;
+//    }
 
-        menuflag = 1;
-
-        YoYo.with(Techniques.Tada)
-                .duration(700)
-                .playOn(layout.findViewById(R.id.drawer_list));
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(700);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        // startActivity(new Intent(getActivity(), MainMyEventsActivity.class));
-                        //onCreateView2(inflater2,container2,savedInstanceState2);
-                        adapter = new NavDrawerAdapter(getActivity(), getData2(getActivity()));
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-//                        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
-//                            @Override
-//                            public void onClick(View view, int position) {
-//
-//
-//                                YoYo.with(Techniques.Tada)
-//                                        .duration(700)
-//                                        .playOn(layout.findViewById(R.id.drawer_list));
-//
-//                                displayEvent.setName(biblio.get(position).getName());
-//                                displayEvent.setDesciption(biblio.get(position).getDescription());
-//
-//
-//                                new Thread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        try {
-//                                            Thread.sleep(700);
-//                                        } catch (InterruptedException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                        getActivity().runOnUiThread(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                startActivity(new Intent(getActivity(), DisplayEventActivity.class));
-//                                            }
-//                                        });
-//                                    }
-//
-//                                }).start();
-//
-//
-//                            }
-//
-//
-//                            @Override
-//                            public void onLongClick(View view, int position) {
-//
-//                            }
-//                        }));
-
-                        Log.d("MyEvent", "MyEvents View selected");
-                        Log.d("MyEvent", "MyEvents View selected");
-                        Log.d("MyEvent", "MyEvents View selected");
-
-                    }
-                });
-            }
-
-        }).start();
-
+    public boolean isDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
-
-    if (position == 3) {
-
-
-        YoYo.with(Techniques.Tada)
-                .duration(700)
-                .playOn(layout.findViewById(R.id.drawer_list));
-
-
-    }
-
-}else {
-
-    YoYo.with(Techniques.Tada)
-            .duration(700)
-            .playOn(layout.findViewById(R.id.drawer_list));
-
-    displayEvent.setName(biblio.get(position).getName());
-    displayEvent.setDesciption(biblio.get(position).getDescription());
-
-
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(700);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(getActivity(), DisplayEventActivity.class));
-                }
-            });
-        }
-
-    }).start();
-
-}
-
-            }
-
-
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-        return layout;
-    }
-
-
-
-    public View onCreateView2(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        Log.d("MyEvent","onCreateView2");
-        Log.d("MyEvent","onCreateView2");
-        Log.d("MyEvent","onCreateView2");
-
-
-
-        // Inflate the layout for this fragment
-        final View layout = inflater.inflate(R.layout.fragment_my_events3, container, false);
-        recyclerView = (RecyclerView) layout.findViewById(R.id.drawer_list);
-        adapter = new NavDrawerAdapter(getActivity(), getData2(getActivity()));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-
-
-                YoYo.with(Techniques.Tada)
-                        .duration(700)
-                        .playOn(layout.findViewById(R.id.drawer_list));
-
-                displayEvent.setName(biblio.get(position).getName());
-                displayEvent.setDesciption(biblio.get(position).getDescription());
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(700);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(getActivity(), DisplayEventActivity.class));
-                            }
-                        });
-                    }
-
-                }).start();
-
-
-
-            }
-
-
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-        return layout;
-    }
-
-    public static List<NavItem> getData() {
-        List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "My Events 2", "My Events 3", "Test 4"};
-        for (int i = 0; i < titles.length; i++) {
-            NavItem current = new NavItem();
-            current.iconId = R.drawable.ic_launcher_strawberry;
-            current.title = titles[i];
-            data.add(current);
-        }
-        return data;
-    }
-
-
-    public static List<NavItem> getData2( Context itself) {
-
-
-        List<NavItem> data = new ArrayList<>();
-
-
-        SQLdb info = new SQLdb(itself);
-        info.open();
-
-        ArrayList<Event> biblio2 = info.getData2();
-
-        info.dumpDB();
-
-        if(UpdateFlag.getUpdate() == 1) {
-            info.initDB();
-        }
-
-        info.populate();
-
-        info.close();
-
-
-        if(!biblio.equals(biblio2)){
-
-            biblio = biblio2;
-        }
-
-
-        Event sco2;
-        String name;
-
-        int len1 = 8;
-        int len2 = 8;
-
-        for (int i = 0; i < biblio.size(); i++) {
-            sco2 = biblio.get(i);
-            if(sco2.getName().length() < 8){
-                len1 = sco2.getName().length();
-            }
-            if(sco2.getDescription().length() < 8){
-                len2 = sco2.getDescription().length();
-            }
-            name = String.format("%15s", sco2.getName().substring(0,len1));
-
-            NavItem current = new NavItem();
-            current.iconId = R.drawable.ic_launcher_strawberry;
-            current.title = name;
-            data.add(current);
-
-        }
-
-
-        return data;
-    }
-
-
-
-    public void setUp(int fragmentID, DrawerLayout drawerLayout, Toolbar toolbar) {
-        containerView = getActivity().findViewById(fragmentID);
+    /**
+     * Users of this fragment must call this method to set up the navigation drawer interactions.
+     *
+     * @param fragmentId   The android:id of this fragment in its activity's layout.
+     * @param drawerLayout The DrawerLayout containing this fragment's UI.
+     */
+    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+        mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
-                }
-                getActivity().invalidateOptionsMenu();
-            }
 
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the navigation drawer and the action bar app icon.
+        mDrawerToggle = new ActionBarDrawerToggle(
+                getActivity(),                    /* host Activity */
+                mDrawerLayout,                    /* DrawerLayout object */
+                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
+                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
+                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
+        ) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getActivity().invalidateOptionsMenu();
+                if (!isAdded()) {
+                    return;
+                }
 
+                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                if (!isAdded()) {
+                    return;
+                }
+
+                if (!mUserLearnedDrawer) {
+                    // The user manually opened the drawer; store this flag to prevent auto-showing
+                    // the navigation drawer automatically in the future.
+                    mUserLearnedDrawer = true;
+                    SharedPreferences sp = PreferenceManager
+                            .getDefaultSharedPreferences(getActivity());
+                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
+                }
+
+                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
+
+        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
+        // per the navigation drawer design guidelines.
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(containerView);
+            mDrawerLayout.openDrawer(mFragmentContainerView);
         }
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        // Defer code dependent on restoration of previous instance state.
         mDrawerLayout.post(new Runnable() {
             @Override
             public void run() {
                 mDrawerToggle.syncState();
             }
         });
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    public static void saveToPreferences(Context context, String preferenceName, String preferenceValue) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(preferenceName, preferenceValue);
-        editor.apply();
-    }
-
-    public static String readFromPreferences(Context context, String preferenceName, String defaultValue) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(preferenceName, defaultValue);
-    }
-
-    static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private ClickListener clickListener;
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener){
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if(child != null && clickListener != null){
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                    }
-                }
-            });
+    private void selectItem(int position) {
+        mCurrentSelectedPosition = position;
+        if (mDrawerListView != null) {
+            mDrawerListView.setItemChecked(position, true);
         }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-            View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-            if(child != null && clickListener != null && gestureDetector.onTouchEvent(motionEvent)){
-                clickListener.onClick(child, recyclerView.getChildPosition(child));
-            }
-            return false;
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-
-        @Override
-        public void onTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
-
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 
-    public static interface ClickListener {
-        public void onClick(View view, int position);
-        public void onLongClick(View view, int position);
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (NavigationDrawerCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Forward the new configuration the drawer toggle component.
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // If the drawer is open, show the global app actions in the action bar. See also
+        // showGlobalContextActionBar, which controls the top-left area of the action bar.
+        if (mDrawerLayout != null && isDrawerOpen()) {
+            inflater.inflate(R.menu.global, menu);
+            showGlobalContextActionBar();
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_example) {
+            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Per the navigation drawer design guidelines, updates the action bar to show the global app
+     * 'context', rather than just what's in the current screen.
+     */
+    private void showGlobalContextActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setTitle(R.string.app_name);
+    }
+
+    private ActionBar getActionBar() {
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    /**
+     * Callbacks interface that all activities using this fragment must implement.
+     */
+    public static interface NavigationDrawerCallbacks {
+        /**
+         * Called when an item in the navigation drawer is selected.
+         */
+        void onNavigationDrawerItemSelected(int position);
     }
 }

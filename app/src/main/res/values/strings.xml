@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">IchiGo</string>
-    <string name="title_activity_maps">Ichi go</string>
-    <string name="title_activity_main">Ichi-go</string>
+    <string name="app_name">IchiGo0</string>
+    <string name="title_activity_maps">Ichi go1</string>
+    <string name="title_activity_main">Ichi-go2</string>
     <string name="title_activity_main_my_events">My Events</string>
     <string name="title_activity_new_event">Create New Event</string>
     <string name="title_activity_display_event">View Event</string>
@@ -25,5 +25,15 @@
 
     <string name="hello_world">"@ChuckNorris does not use @JakeWharton libraries to develop on #Android."</string>
     <string name="title_activity_json_parse">JsonParseActivity</string>
+    <string name="title_activity_main_activity2">MainActivity2Activity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
 
 </resources>
