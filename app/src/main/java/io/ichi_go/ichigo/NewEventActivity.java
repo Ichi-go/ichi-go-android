@@ -50,9 +50,9 @@ public class NewEventActivity extends ActionBarActivity {
     }
 
     public void createEvent(View v) {
-        if(v.getId() == R.id.create_event_button) {
-            Log.d("NewEvent","A new event was created");
-            NavUtils.navigateUpFromSameTask(this);
+        if(v == findViewById(R.id.create_event_button)) {
+                Log.d("NewEvent","A new event was created");
+                NavUtils.navigateUpFromSameTask(this);
         }
     }
 
