@@ -18,4 +18,7 @@
     <string name="strEdit">Edit</string>
     <string name="strDummyDescription">This is where the description goes!</string>
     <string name="strDummyName">Event Name</string>
+    <string name="title_activity_view_all_events">ViewAllEventsActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
