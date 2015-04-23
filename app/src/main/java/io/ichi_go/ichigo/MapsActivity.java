@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
@@ -22,6 +23,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 
 
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ import java.util.ArrayList;
 public class MapsActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        OnMapClickListener {
 
     public static LatLng latLng;
     public static final String TAG = MapsActivity.class.getSimpleName();
@@ -130,6 +133,9 @@ public class MapsActivity extends ActionBarActivity implements
         Log.d("DB","Update DB");
         Log.d("DB","Update DB");
 
+        Log.d("Maps","onResume");
+        Log.d("Maps","onResume");
+        Log.d("Maps","onResume");
 
     }
 
@@ -176,6 +182,7 @@ public class MapsActivity extends ActionBarActivity implements
         mapSettings.setZoomControlsEnabled(true);
 
 
+
     }
 
     /**
@@ -190,6 +197,8 @@ public class MapsActivity extends ActionBarActivity implements
         Double lon = new Double(currentLocation.getLongitude());
         String name = currentLocation.getName();
         mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(name));
+        mMap.setOnMapClickListener(this);
+
 
     }
 
@@ -218,6 +227,15 @@ public class MapsActivity extends ActionBarActivity implements
         Log.d("DB","Update DB");
         Log.d("DB","Update DB");
 
+        Log.d("Maps","onConnected");
+        Log.d("Maps","onConnected");
+        Log.d("Maps","onConnected");
+
+        if(UpdateFlag.getChooseLoc() == 1) {
+            Toast.makeText(this,
+                    "Please choose a location for event",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void startLocationUpdates() {
@@ -272,4 +290,30 @@ public class MapsActivity extends ActionBarActivity implements
     }
 
 
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+        if(UpdateFlag.getChooseLoc() == 1){
+
+
+            newEventLocation.setLatitude(latLng.latitude);
+            newEventLocation.setLongitude(latLng.longitude);
+
+            SQLdb entry = new SQLdb(MapsActivity.this);
+            entry.open();
+            entry.createEntry(newEventLocation.getName(), newEventLocation.getDescription(), newEventLocation.getLatitude(),newEventLocation.getLongitude(), newEventLocation.getLocation());
+            entry.close();
+
+            UpdateFlag.setChooseLoc(0);
+
+            mMap.addMarker(new MarkerOptions().position(latLng).title(newEventLocation.getName()));
+
+        }
+
+        Log.d("Maps","onMapClick");
+        Log.d("Maps","onMapClick");
+        Log.d("Maps","onMapClick");
+
+
+    }
 }

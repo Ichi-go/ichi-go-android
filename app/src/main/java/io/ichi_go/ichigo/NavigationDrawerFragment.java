@@ -43,6 +43,8 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
     private View containerView;
+    private View layout2;
+    private LayoutInflater inflater2;
     public static ArrayList<Event> biblio = new ArrayList<Event>();
     private int menuflag = 0;
 
@@ -69,16 +71,17 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        final LayoutInflater inflater2 = inflater;
-        final ViewGroup container2 = container;
-        final Bundle savedInstanceState2 = savedInstanceState;
+//        final LayoutInflater inflater2 = inflater;
+//        final ViewGroup container2 = container;
+//        final Bundle savedInstanceState2 = savedInstanceState;
         menuflag = 0;
 
         getData2(getActivity());
 
         // Inflate the layout for this fragment
         final View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-
+layout2 = layout;
+inflater2 = inflater;
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawer_list);
         adapter = new NavDrawerAdapter(getActivity(), getData());
@@ -278,65 +281,6 @@ if(menuflag == 0) {
 
 
 
-    public View onCreateView2(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        Log.d("MyEvent","onCreateView2");
-        Log.d("MyEvent","onCreateView2");
-        Log.d("MyEvent","onCreateView2");
-
-
-
-        // Inflate the layout for this fragment
-        final View layout = inflater.inflate(R.layout.fragment_my_events3, container, false);
-        recyclerView = (RecyclerView) layout.findViewById(R.id.drawer_list);
-        adapter = new NavDrawerAdapter(getActivity(), getData2(getActivity()));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-
-
-                YoYo.with(Techniques.Tada)
-                        .duration(700)
-                        .playOn(layout.findViewById(R.id.drawer_list));
-
-                displayEvent.setName(biblio.get(position).getName());
-                displayEvent.setDesciption(biblio.get(position).getDescription());
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(700);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(getActivity(), DisplayEventActivity.class));
-                            }
-                        });
-                    }
-
-                }).start();
-
-
-
-            }
-
-
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-        return layout;
-    }
-
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
         String[] titles = {"New Event", "Address", "My Events 3", "Test 4"};
@@ -391,7 +335,7 @@ if(menuflag == 0) {
                 len1 = sco2.getName().length();
             }
 
-            name = String.format("%15s", sco2.getName().substring(0,len1));
+            name = String.format("%-15s", sco2.getName().substring(0,len1));
 
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;
@@ -460,6 +404,15 @@ if(menuflag == 0) {
                     System.out.println(opt);
 
                 }
+
+
+
+                recyclerView = (RecyclerView) layout2.findViewById(R.id.drawer_list);
+                adapter = new NavDrawerAdapter(getActivity(), getData());
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                menuflag = 0;
+
                 Log.d("Drawer","onDrawerClosed");
                 Log.d("Drawer","onDrawerClosed");
                 Log.d("Drawer","onDrawerClosed");

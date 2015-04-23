@@ -87,16 +87,23 @@ public class NewEventActivity extends ActionBarActivity {
                             String eName = String.valueOf(etName.getText());
                             String eDes = String.valueOf(etDes.getText());
 
+                       newEventLocation.setName(String.valueOf(etName.getText()));
+                            newEventLocation.setDescription(String.valueOf(etDes.getText()));
+
+
+                           UpdateFlag.setChooseLoc(1);
+
                             LatLng latLng = currentLocation.getLatLng();
 
-                            SQLdb entry = new SQLdb(NewEventActivity.this);
-                            entry.open();
-                            entry.createEntry(eName, eDes, currentLocation.getLatitude(),currentLocation.getLongitude(), currentLocation.getLocation());
-                            entry.close();
+//                            SQLdb entry = new SQLdb(NewEventActivity.this);
+//                            entry.open();
+//                            entry.createEntry(eName, eDes, currentLocation.getLatitude(),currentLocation.getLongitude(), currentLocation.getLocation());
+//                            entry.close();
 
                             Log.d("NewEvent","A new event was created");
                             Log.d("NewEvent","A new event was created");
                             Log.d("NewEvent","A new event was created");
+
                             NavUtils.navigateUpFromSameTask(itself);
 
                         }

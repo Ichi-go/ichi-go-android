@@ -438,7 +438,7 @@ public class SQLdb {
                     builder.append(line);
                 }
             } else {
-                Log.e(JsonParseActivity.class.toString(), "Failed to download file");
+                Log.e(SQLdb.class.toString(), "Failed to download file");
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();

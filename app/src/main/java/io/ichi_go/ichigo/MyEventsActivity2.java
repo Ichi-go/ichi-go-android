@@ -106,7 +106,7 @@ public class MyEventsActivity2 extends ActionBarActivity {
                     builder.append(line);
                 }
             } else {
-                Log.e(JsonParseActivity.class.toString(), "Failed to download file");
+                Log.e(MyEventsActivity2.class.toString(), "Failed to download file");
             }
         } catch (ClientProtocolException e) {
             e.printStackTrace();
