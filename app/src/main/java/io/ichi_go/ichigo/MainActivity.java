@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private final LatLng LOCATION_SOCORRO = new LatLng(34.0617, -106.8994);
     private final LatLng LOCATION_NMT = new LatLng(34.0668, -106.9056);
-    private Event currentEvent = new Event(19, "Test Event", "Not a real event", 34.0571113,-106.8927191,"M Mountain Cafe");
+    private Event currentEvent = new Event(19,"Test Event", "Not a real event", 34.0571113,-106.8927191,"M Mountain Cafe");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,9 @@ public class MainActivity extends ActionBarActivity implements
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
         buildGoogleApiClient();
+        googleMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LOCATION_SOCORRO, 12));
+
     }
 
     private void buildGoogleApiClient() {
@@ -112,6 +115,7 @@ public class MainActivity extends ActionBarActivity implements
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 13));
         } else {
             Toast.makeText(this, "Connection failed", Toast.LENGTH_LONG).show();
+
         }
     }
 
