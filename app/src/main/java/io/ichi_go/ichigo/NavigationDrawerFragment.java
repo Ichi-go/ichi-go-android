@@ -73,22 +73,13 @@ public class NavigationDrawerFragment extends Fragment {
                 }
 
                 if (position == 1) {
-                    //
-                    //
-                    // PLACEHOLDER FOR MY EVENTS PAGE TO TEST ViewEventActivity
-                    //
-                    //
-                    final Event currentEvent = new Event(19, "Test Event", "Not a real event", 34.0571113,-106.8927191,"M Mountain Cafe");
-
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Intent i = new Intent(getActivity(), ViewEventActivity.class);
-                                    i.putExtra("currentEvent", (Parcelable) currentEvent);
-                                    startActivity(i);
+                                    startActivity(new Intent(getActivity(), ViewAllEventsActivity.class));
                                 }
                             });
                         }

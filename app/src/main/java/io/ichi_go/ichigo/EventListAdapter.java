@@ -32,7 +32,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
     public void onBindViewHolder(MyViewHolder viewHolder, int i) {
         Event current = data.get(i);
         viewHolder.name.setText(current.getName());
-        viewHolder.description.setText(current.getDescription());
+        //viewHolder.description.setText(current.getDescription());
     }
 
     @Override
@@ -42,12 +42,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name;
-        TextView description;
+        //TextView description;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.event_list_name);
-            description = (TextView) itemView.findViewById(R.id.event_list_description);
+            //description = (TextView) itemView.findViewById(R.id.event_list_description);
         }
     }
 

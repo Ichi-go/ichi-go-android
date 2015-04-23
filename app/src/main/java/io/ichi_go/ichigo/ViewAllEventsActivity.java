@@ -1,9 +1,13 @@
 package io.ichi_go.ichigo;
 
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
 public class ViewAllEventsActivity extends ActionBarActivity {
@@ -12,13 +16,17 @@ public class ViewAllEventsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all_events);
-    }
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_all_events, menu);
+        getMenuInflater().inflate(R.menu.menu_new_event, menu);
         return true;
     }
 
@@ -34,6 +42,11 @@ public class ViewAllEventsActivity extends ActionBarActivity {
             return true;
         }
 
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
 }
