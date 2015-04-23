@@ -29,13 +29,9 @@ import java.util.List;
 public class NavigationDrawerFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    public static final String PREF_FILE_NAME = "testpref";
-    public static final String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private NavDrawerAdapter adapter;
-    private boolean mUserLearnedDrawer;
-    private boolean mFromSavedInstanceState;
     private View containerView;
 
     public NavigationDrawerFragment() {
@@ -46,10 +42,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLearnedDrawer = Boolean.valueOf(readFromPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, "false"));
-        if (savedInstanceState != null) {
-            mFromSavedInstanceState = true;
-        }
+
     }
 
     @Override
@@ -134,10 +127,6 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
-                }
                 getActivity().invalidateOptionsMenu();
             }
 
@@ -148,9 +137,6 @@ public class NavigationDrawerFragment extends Fragment {
 
             }
         };
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(containerView);
-        }
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
             @Override
@@ -158,18 +144,6 @@ public class NavigationDrawerFragment extends Fragment {
                 mDrawerToggle.syncState();
             }
         });
-    }
-
-    public static void saveToPreferences(Context context, String preferenceName, String preferenceValue) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(preferenceName, preferenceValue);
-        editor.apply();
-    }
-
-    public static String readFromPreferences(Context context, String preferenceName, String defaultValue) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(preferenceName, defaultValue);
     }
 
     static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
