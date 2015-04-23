@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="io.ichi_go.ichigo.ViewEventActivity">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <RelativeLayout
+        android:id="@+id/rlHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="20dp"
+        android:paddingLeft="72dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/app_bar">
+
+        <TextView
+            android:id="@+id/display_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strDummyName"
+            android:textSize="34sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlHeader"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:paddingLeft="72dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:id="@+id/display_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/strDummyDescription"
+            android:textSize="15sp"
+            android:textColor="@color/colorPrimaryText"/>
+
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlButtons"
+        android:layout_below="@id/rlDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_centerInParent="true"/>
+        <Button
+            android:id="@+id/edit_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/space"
+            android:layout_toStartOf="@+id/space"
+            android:text="@string/strEdit"
+            android:onClick="editEvent"/>
+
+        <Button
+            android:id="@+id/delete_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/space"
+            android:layout_toEndOf="@+id/space"
+            android:text="@string/strDelete"
+            android:onClick="deleteEvent"/>
+
+        </RelativeLayout>
+
+</RelativeLayout>

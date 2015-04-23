@@ -12,4 +12,11 @@
     <string name="event_description">Description</string>
     <string name="create_event">Create Event</string>
     <string name="event_location">Location</string>
+    <string name="title_activity_view_event">ViewEventActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="strDelete">Delete</string>
+    <string name="strEdit">Edit</string>
+    <string name="strDummyDescription">This is where the description goes!</string>
+    <string name="strDummyName">Event Name</string>
 </resources>

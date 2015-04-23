@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -63,9 +64,46 @@ public class NavigationDrawerFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                if(position == 0){
-                    startActivity(new Intent(getActivity(), NewEventActivity.class));
+                if (position == 0) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(getActivity(), NewEventActivity.class));
+                                }
+                            });
+                        }
+
+                    }).start();
                 }
+
+                if (position == 1) {
+                    //
+                    //
+                    // PLACEHOLDER FOR MY EVENTS PAGE TO TEST ViewEventActivity
+                    //
+                    //
+                    final Event currentEvent = new Event(19, "Test Event", "Not a real event", 34.0571113,-106.8927191,"M Mountain Cafe");
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent i = new Intent(getActivity(), ViewEventActivity.class);
+                                    i.putExtra("currentEvent", (Parcelable) currentEvent);
+                                    startActivity(i);
+                                }
+                            });
+                        }
+
+                    }).start();
+                }
+
+
             }
 
             @Override
@@ -78,7 +116,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"Create Event", "My Events", "Friends", "Profile", "General", "Help & Feedback", "Settings"};
+        String[] titles = {"Create Event", "List of Events", "Friends", "Profile", "General", "Help & Feedback", "Settings"};
         for (int i = 0; i < titles.length; i++) {
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;
@@ -138,9 +176,10 @@ public class NavigationDrawerFragment extends Fragment {
 
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener){
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
                     return true;
@@ -149,7 +188,7 @@ public class NavigationDrawerFragment extends Fragment {
                 @Override
                 public void onLongPress(MotionEvent e) {
                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if(child != null && clickListener != null){
+                    if (child != null && clickListener != null) {
                         clickListener.onLongClick(child, recyclerView.getChildPosition(child));
                     }
                 }
@@ -159,7 +198,7 @@ public class NavigationDrawerFragment extends Fragment {
         @Override
         public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
             View child = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
-            if(child != null && clickListener != null && gestureDetector.onTouchEvent(motionEvent)){
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(motionEvent)) {
                 clickListener.onClick(child, recyclerView.getChildPosition(child));
             }
             return false;
@@ -173,6 +212,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static interface ClickListener {
         public void onClick(View view, int position);
+
         public void onLongClick(View view, int position);
     }
 }

@@ -42,8 +42,7 @@ public class MainActivity extends ActionBarActivity implements
 
     private final LatLng LOCATION_SOCORRO = new LatLng(34.0617, -106.8994);
     private final LatLng LOCATION_NMT = new LatLng(34.0668, -106.9056);
-
-
+    private Event currentEvent = new Event(19, "Test Event", "Not a real event", 34.0571113,-106.8927191,"M Mountain Cafe");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,4 +130,9 @@ public class MainActivity extends ActionBarActivity implements
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
     }
+
+    public Event getCurrentEvent() {
+        return currentEvent;
+    }
+
 }
