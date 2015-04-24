@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 /**
  * Created by ahernand on 4/17/15.
  */
-public class newEventLocation {
+public class NewEventLocation {
 
 
     private static String name = "Albuquerque stuffs";
@@ -26,21 +26,21 @@ public class newEventLocation {
         return latLng;
     }
     public static void setLatLng(LatLng latLng) {
-        newEventLocation.latLng = latLng;
-        newEventLocation.setLatitude(latLng.latitude);
-        newEventLocation.setLongitude(latLng.longitude);
+        NewEventLocation.latLng = latLng;
+        NewEventLocation.setLatitude(latLng.latitude);
+        NewEventLocation.setLongitude(latLng.longitude);
     }
 
     public static String getData() {return data;}
     public static void setData(String data) {
-        newEventLocation.data = data;}
+        NewEventLocation.data = data;}
 
     public static String getLatitude() {
         return latitude;
     }
 
     public static void setLatitude(Double latitude) {
-        newEventLocation.latitude = formatter.format(latitude);
+        NewEventLocation.latitude = formatter.format(latitude);
     }
 
     public static String getLongitude() {
@@ -48,7 +48,7 @@ public class newEventLocation {
     }
 
     public static void setLongitude(Double longitude) {
-        newEventLocation.longitude = formatter.format(longitude);
+        NewEventLocation.longitude = formatter.format(longitude);
     }
 
     public static String getLocation() {
@@ -56,7 +56,7 @@ public class newEventLocation {
     }
 
     public static void setLocation(String location) {
-        newEventLocation.location = location;
+        NewEventLocation.location = location;
     }
 
     public static String getName() {
@@ -64,7 +64,7 @@ public class newEventLocation {
     }
 
     public static void setName(String name) {
-        newEventLocation.name = name;
+        NewEventLocation.name = name;
     }
 
     public static String getDescription() {
@@ -72,6 +72,6 @@ public class newEventLocation {
     }
 
     public static void setDescription(String description) {
-        newEventLocation.description = description;
+        NewEventLocation.description = description;
     }
 }

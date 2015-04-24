@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 /**
  * Created by ahernand on 4/17/15.
  */
-public class currentLocation {
+public class CurrentLocation {
 
 
     private static String name = "Albuquerque stuffs";
@@ -25,21 +25,21 @@ public class currentLocation {
         return latLng;
     }
     public static void setLatLng(LatLng latLng) {
-        currentLocation.latLng = latLng;
-        currentLocation.setLatitude(latLng.latitude);
-        currentLocation.setLongitude(latLng.longitude);
+        CurrentLocation.latLng = latLng;
+        CurrentLocation.setLatitude(latLng.latitude);
+        CurrentLocation.setLongitude(latLng.longitude);
     }
 
     public static String getData() {return data;}
     public static void setData(String data) {
-        currentLocation.data = data;}
+        CurrentLocation.data = data;}
 
     public static String getLatitude() {
         return latitude;
     }
 
     public static void setLatitude(Double latitude) {
-        currentLocation.latitude = formatter.format(latitude);
+        CurrentLocation.latitude = formatter.format(latitude);
     }
 
     public static String getLongitude() {
@@ -47,7 +47,7 @@ public class currentLocation {
     }
 
     public static void setLongitude(Double longitude) {
-        currentLocation.longitude = formatter.format(longitude);
+        CurrentLocation.longitude = formatter.format(longitude);
     }
 
     public static String getLocation() {
@@ -55,7 +55,7 @@ public class currentLocation {
     }
 
     public static void setLocation(String location) {
-        currentLocation.location = location;
+        CurrentLocation.location = location;
     }
 
     public static String getName() {
@@ -63,6 +63,6 @@ public class currentLocation {
     }
 
     public static void setName(String name) {
-        currentLocation.name = name;
+        CurrentLocation.name = name;
     }
 }

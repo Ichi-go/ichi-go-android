@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 /**
  * Created by ahernand on 4/17/15.
  */
-public class displayEvent {
+public class DisplayEvent {
 
     private static String name = "dummyname";
     private static String desciption = "dummydescription";
@@ -23,9 +23,9 @@ public class displayEvent {
         return latLng;
     }
     public static void setLatLng(LatLng latLng) {
-        displayEvent.latLng = latLng;
-        displayEvent.setLatitude(latLng.latitude);
-        displayEvent.setLongitude(latLng.longitude);
+        DisplayEvent.latLng = latLng;
+        DisplayEvent.setLatitude(latLng.latitude);
+        DisplayEvent.setLongitude(latLng.longitude);
     }
 
     public static String getLatitude() {
@@ -33,7 +33,7 @@ public class displayEvent {
     }
 
     public static void setLatitude(Double latitude) {
-        displayEvent.latitude = formatter.format(latitude);
+        DisplayEvent.latitude = formatter.format(latitude);
     }
 
     public static String getLongitude() {
@@ -41,7 +41,7 @@ public class displayEvent {
     }
 
     public static void setLongitude(Double longitude) {
-        displayEvent.longitude = formatter.format(longitude);
+        DisplayEvent.longitude = formatter.format(longitude);
     }
 
     public static String getName() {
@@ -49,7 +49,7 @@ public class displayEvent {
     }
 
     public static void setName(String name) {
-        displayEvent.name = name;
+        DisplayEvent.name = name;
     }
 
     public static String getDesciption() {
@@ -57,7 +57,7 @@ public class displayEvent {
     }
 
     public static void setDesciption(String desciption) {
-        displayEvent.desciption = desciption;
+        DisplayEvent.desciption = desciption;
     }
 
     public static String getLocation() {
@@ -65,6 +65,6 @@ public class displayEvent {
     }
 
     public static void setLocation(String location) {
-        displayEvent.location = location;
+        DisplayEvent.location = location;
     }
 }
