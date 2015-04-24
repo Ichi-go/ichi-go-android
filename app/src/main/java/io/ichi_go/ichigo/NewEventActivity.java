@@ -1,6 +1,5 @@
 package io.ichi_go.ichigo;
 
-import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,6 +13,17 @@ import android.widget.EditText;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import static io.ichi_go.ichigo.R.id.event_description;
 import static io.ichi_go.ichigo.R.id.event_name;
@@ -87,22 +97,54 @@ public class NewEventActivity extends ActionBarActivity {
                             String eName = String.valueOf(etName.getText());
                             String eDes = String.valueOf(etDes.getText());
 
-                       newEventLocation.setName(String.valueOf(etName.getText()));
-                            newEventLocation.setDescription(String.valueOf(etDes.getText()));
+                            NewEventLocation.setName(String.valueOf(etName.getText()));
+                            NewEventLocation.setDescription(String.valueOf(etDes.getText()));
 
+                            Event eventToSend = new Event("0", eName, eDes, NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), NewEventLocation.getLocation());
+                            UpdateFlag.setChooseLoc(1);
 
-                           UpdateFlag.setChooseLoc(1);
+                            LatLng latLng = CurrentLocation.getLatLng();
 
-                            LatLng latLng = currentLocation.getLatLng();
-
-//                            SQLdb entry = new SQLdb(NewEventActivity.this);
-//                            entry.open();
-//                            entry.createEntry(eName, eDes, currentLocation.getLatitude(),currentLocation.getLongitude(), currentLocation.getLocation());
-//                            entry.close();
+                            SQLdb entry = new SQLdb(NewEventActivity.this);
+                            entry.open();
+                            entry.createEntry(eName, eDes, NewEventLocation.getLatitude(),NewEventLocation.getLongitude(), NewEventLocation.getLocation());
+                            entry.writeCentral();
+                            entry.close();
 
                             Log.d("NewEvent","A new event was created");
                             Log.d("NewEvent","A new event was created");
                             Log.d("NewEvent","A new event was created");
+
+                            // Produce the output
+                            ByteArrayOutputStream out = new ByteArrayOutputStream();
+                            Writer writer = null;
+                            try {
+                                writer = new OutputStreamWriter(out, "UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                writer.write(eventToSend.getJSON().toString());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            // Create the request
+                            HttpPost request = new HttpPost("http://10.0.2.2:8000/addEvent");
+                            request.setEntity(new ByteArrayEntity(out.toByteArray()));
+
+                            request.addHeader("Content-Type", "application/json");
+                            // Send the request
+                            DefaultHttpClient client = new DefaultHttpClient();
+                            try {
+                                HttpResponse response = client.execute(request);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+
 
                             NavUtils.navigateUpFromSameTask(itself);
 

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,12 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -110,7 +110,16 @@ if(menuflag == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(getActivity(), NewEventActivity.class));
+
+                        Toast.makeText(getActivity(),
+                                "Click and hold to choose location",
+                                Toast.LENGTH_SHORT).show();
+
+                        mDrawerLayout.closeDrawer(Gravity.LEFT);
+
+//                        startActivity(new Intent(getActivity(), NewEventActivity.class));
+
+
                     }
                 });
             }
@@ -243,8 +252,8 @@ if(menuflag == 0) {
             .duration(700)
             .playOn(layout.findViewById(R.id.drawer_list));
 
-    displayEvent.setName(biblio.get(position).getName());
-    displayEvent.setDesciption(biblio.get(position).getDescription());
+    DisplayEvent.setName(biblio.get(position).getName());
+    DisplayEvent.setDesciption(biblio.get(position).getDescription());
 
 
     new Thread(new Runnable() {
@@ -308,7 +317,8 @@ if(menuflag == 0) {
         info.dumpDB();
 
 //        if(UpdateFlag.getUpdate() == 1) {
-//            info.initDB();
+//        info.initDB();
+
 //        }
 //
 //        info.populate();
