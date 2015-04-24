@@ -23,4 +23,19 @@
     <string name="strDummyName">Event Name</string>
 
     <string name="hello_world">Hello world!</string>
+
+
+    <!--Make these meaningful-->
+    <string name="intro_message">Intro message</string>
+    <string name="autocomplete_hint">Autocomplete Hint</string>
+    <string name="clear_text">Clear Text</string>
+    <string name="selected_place">Selected Place</string>
+    <string name="title_activity_maps">Intro message</string>
+    <string name="title_activity_display_event">Intro message</string>
+    <string name="title_activity_my_events">Intro message</string>
+    <string name="title_activity_address">Intro message</string>
+    <string name="title_activity_sample_activity_base">Intro message</string>
+    <!--Make these meaningful-->
+
+
 </resources>
