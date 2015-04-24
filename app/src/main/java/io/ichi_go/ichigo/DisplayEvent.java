@@ -13,6 +13,7 @@ public class DisplayEvent {
     private static String desciption = "dummydescription";
     private static String location;
     private static LatLng latLng;
+    private static String id = "";
 
     private static DecimalFormat formatter = new DecimalFormat("000.0000");
 
@@ -66,5 +67,13 @@ public class DisplayEvent {
 
     public static void setLocation(String location) {
         DisplayEvent.location = location;
+    }
+
+    public static String getId() {
+        return id;
+    }
+
+    public static void setId(String id) {
+        DisplayEvent.id = id;
     }
 }

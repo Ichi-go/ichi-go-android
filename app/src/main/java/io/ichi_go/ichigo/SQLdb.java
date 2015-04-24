@@ -8,12 +8,17 @@ package io.ichi_go.ichigo;
 
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,6 +35,8 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -416,6 +423,49 @@ public class SQLdb {
 
 
             UpdateFlag.setUpdate(0);
+        }
+
+
+    }
+
+
+    public void writeCentral() {
+
+        List<NavItem> data = new ArrayList<>();
+
+        SQLdb info = this;
+        info.open();
+        ArrayList<Event> biblio2 = info.getData2();
+        info.dumpDB();
+        info.close();
+        JSONArray array = new JSONArray(biblio2);
+
+
+            // Produce the output
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Writer writer = null;
+        try {
+            writer = new OutputStreamWriter(out, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
+            writer.write(array.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+// Create the request
+        HttpPost request = new HttpPost("http://10.0.2.2:8000/addEvent");
+        request.setEntity(new ByteArrayEntity(out.toByteArray()));
+
+// Send the request
+        DefaultHttpClient client = new DefaultHttpClient();
+        try {
+            HttpResponse response = client.execute(request);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 

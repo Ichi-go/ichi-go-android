@@ -4,66 +4,31 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.jmpergar.awesometext.AwesomeTextHandler;
+import com.google.android.gms.maps.model.LatLng;
+
+import static io.ichi_go.ichigo.R.id.event_description;
+import static io.ichi_go.ichigo.R.id.event_name;
 
 
-public class DisplayEventActivity extends ActionBarActivity {
-
-    private static final String HASHTAG_PATTERN = "(#[\\p{L}0-9-_]+)";
-    private static final String MENTION_PATTERN = "(@[\\p{L}0-9-_]+)";
+public class EditEventActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_event);
+        setContentView(R.layout.activity_edit_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        TextView tv = (TextView) findViewById(R.id.display_event_name);
-        TextView tv2 = (TextView) findViewById(R.id.display_event_description);
-
-//        tv.setTypeface(Typeface.MONOSPACE);
-//        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-
-        String awesome = "@";
-        awesome = DisplayEvent.getName();
-
-        tv.setText(awesome);
-
-        awesome = "@";
-        awesome = DisplayEvent.getDesciption();
-        tv2.setText(awesome);
-
-
-
-//        TextView textView = (TextView) findViewById(R.id.display_event_name2);
-//        EditText editText = (EditText) findViewById(R.id.display_event_description2);
-
-        AwesomeTextHandler awesomeTextViewHandler = new AwesomeTextHandler();
-        awesomeTextViewHandler
-                .addViewSpanRenderer(HASHTAG_PATTERN, new HashtagsSpanRenderer())
-                .addViewSpanRenderer(MENTION_PATTERN, new MentionSpanRenderer());
-//                .setView(textView);
-
-//        AwesomeTextHandler awesomeEditTextHandler = new AwesomeTextHandler();
-//        awesomeEditTextHandler
-//                .addViewSpanRenderer(HASHTAG_PATTERN, new HashtagsSpanRenderer())
-//                .addViewSpanRenderer(MENTION_PATTERN, new MentionSpanRenderer())
-//                .setView(editText);
-
-        awesomeTextViewHandler.setView(tv);
-        awesomeTextViewHandler.setView(tv2);
-
     }
 
     @Override
@@ -93,11 +58,11 @@ public class DisplayEventActivity extends ActionBarActivity {
     }
 
     public void createEvent(View v) {
-        if(v.getId() == R.id.create_event_button) {
+        if(v.getId() == R.id.edit_event_button) {
 
             YoYo.with(Techniques.RotateOut)
                     .duration(700)
-                    .playOn(findViewById(R.id.create_event_button));
+                    .playOn(findViewById(R.id.edit_event_button));
 
 
             final ActionBarActivity itself = this;
@@ -115,6 +80,29 @@ public class DisplayEventActivity extends ActionBarActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
+                            EditText etName = (EditText) findViewById(event_name);
+                            EditText etDes = (EditText) findViewById(event_description);
+                            String eName = String.valueOf(etName.getText());
+                            String eDes = String.valueOf(etDes.getText());
+
+                       NewEventLocation.setName(String.valueOf(etName.getText()));
+                            NewEventLocation.setDescription(String.valueOf(etDes.getText()));
+
+
+                           UpdateFlag.setChooseLoc(1);
+
+                            LatLng latLng = CurrentLocation.getLatLng();
+
+                            SQLdb entry = new SQLdb(EditEventActivity.this);
+                            entry.open();
+                            entry.createEntry(eName, eDes, NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), NewEventLocation.getLocation());
+                            entry.writeCentral();
+                            entry.close();
+
+                            Log.d("NewEvent","A new event was created");
+                            Log.d("NewEvent","A new event was created");
+                            Log.d("NewEvent","A new event was created");
 
 
                             NavUtils.navigateUpFromSameTask(itself);
