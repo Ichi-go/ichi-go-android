@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import io.ichi_go.ichigo.data.model.Event;
 
 /**
- * The event manager handles events and event accessories.
+ * The event manager is a singleton that handles events and event accessories.
  * Created by randy on 4/25/15.
  * NOTE: Much of the code was adapted from Alex Hernandez's
  */
@@ -129,6 +129,7 @@ public class EventManager {
     }
 
     public void editEvent(Event event) {
+        throw new UnsupportedOperationException();
     }
 
     /**
