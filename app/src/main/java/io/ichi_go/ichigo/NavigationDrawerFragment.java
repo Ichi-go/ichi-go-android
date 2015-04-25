@@ -235,23 +235,7 @@ if(menuflag == 0) {
                 .duration(700)
                 .playOn(layout.findViewById(R.id.drawer_list));
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(700);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(getActivity(), DisplayAllEventsActivity.class));
-                    }
-                });
-            }
 
-        }).start();
     }
 
 }else {
@@ -298,7 +282,7 @@ if(menuflag == 0) {
 
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "Address", "My Events 3", "Expandable List View"};
+        String[] titles = {"New Event", "Address", "My Events 3", "Unused"};
         for (int i = 0; i < titles.length; i++) {
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;
