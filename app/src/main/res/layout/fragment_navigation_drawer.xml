@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+
+    tools:context="io.ichi_go.ichigo.NavigationDrawerFragment">
+
+    <include
+        android:id="@+id/app_bar_space"
+        layout="@layout/app_bar_space" />
+
+
+
+    <ImageView
+        android:id="@+id/image_placeholder"
+        android:layout_below="@id/app_bar_space"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ratio16x9"
+        android:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/image_placeholder"
+        android:background="#EEE"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@id/image_placeholder"
+            android:id="@+id/drawer_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
+
+
+</RelativeLayout>
