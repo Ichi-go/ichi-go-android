@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import io.ichi_go.ichigo.data.model.Event;
+
 
 public class DisplayEventActivity extends ActionBarActivity {
     private Event currentEvent;
