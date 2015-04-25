@@ -3,11 +3,14 @@ package io.ichi_go.ichigo;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,13 +57,19 @@ public class EventManager {
     /**
      * Load all the events you may currently see.
      */
-    public void loadEvents() {
+    public void loadEvents(Double lat, Double lon) {
         String url = "http://10.0.2.2:8000/getEvents";
         DefaultHttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet(url);
+        HttpPost request = new HttpPost(url);
         StringBuilder builder = new StringBuilder();
 
+        ArrayList<NameValuePair> postParameters;
+        postParameters = new ArrayList<NameValuePair>();
+        postParameters.add(new BasicNameValuePair("lat", lat.toString()));
+        postParameters.add(new BasicNameValuePair("lon", lon.toString()));
+
         try {
+            request.setEntity(new UrlEncodedFormEntity(postParameters));
             HttpResponse response = client.execute(request);
             InputStream content = response.getEntity().getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(content));
