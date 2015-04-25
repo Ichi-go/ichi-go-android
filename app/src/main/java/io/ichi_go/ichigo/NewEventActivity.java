@@ -1,5 +1,6 @@
 package io.ichi_go.ichigo;
 
+import android.os.StrictMode;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -26,8 +28,10 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import io.ichi_go.ichigo.data.model.Event;
+import static android.os.StrictMode.setThreadPolicy;
 
 import static io.ichi_go.ichigo.R.id.event_description;
+import static io.ichi_go.ichigo.R.id.event_location;
 import static io.ichi_go.ichigo.R.id.event_name;
 
 
@@ -73,6 +77,13 @@ public class NewEventActivity extends ActionBarActivity {
     public void createEvent(View v) {
         if(v.getId() == R.id.create_event_button) {
 
+            if(String.valueOf(((EditText) findViewById(R.id.event_name)).getText()).isEmpty()){
+                Toast.makeText(this,
+                        "Please enter a name for the event",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             YoYo.with(Techniques.RotateOut)
                     .duration(700)
                     .playOn(findViewById(R.id.create_event_button));
@@ -96,13 +107,25 @@ public class NewEventActivity extends ActionBarActivity {
 
                             EditText etName = (EditText) findViewById(event_name);
                             EditText etDes = (EditText) findViewById(event_description);
+                            EditText etLoc = (EditText) findViewById(event_location);
                             String eName = String.valueOf(etName.getText());
                             String eDes = String.valueOf(etDes.getText());
+                            String eLoc = String.valueOf(etLoc.getText());
 
-                            NewEventLocation.setName(String.valueOf(etName.getText()));
-                            NewEventLocation.setDescription(String.valueOf(etDes.getText()));
+                            //Give default string values if they are empty
+                            if (eDes.isEmpty()) {
+                                eDes = "No description.";
+                            }
+                            if (eLoc.isEmpty()) {
+                                eLoc = "No location specified.";
+                            }
 
-                            Event eventToSend = new Event("0", eName, eDes, NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), NewEventLocation.getLocation());
+
+                            NewEventLocation.setName(eName);
+                            NewEventLocation.setDescription(eDes);
+                            NewEventLocation.setLocation(eLoc);
+
+                            Event eventToSend = new Event("0", eName, eDes, NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), eLoc);
                             UpdateFlag.setChooseLoc(1);
 
                             LatLng latLng = CurrentLocation.getLatLng();
@@ -110,12 +133,16 @@ public class NewEventActivity extends ActionBarActivity {
                             SQLdb entry = new SQLdb(NewEventActivity.this);
                             entry.open();
                             entry.createEntry(eName, eDes, NewEventLocation.getLatitude(),NewEventLocation.getLongitude(), NewEventLocation.getLocation());
-                            entry.writeCentral();
+//                            entry.writeCentral();
                             entry.close();
 
+                            Log.d("NewEvent", "A new event was created");
                             Log.d("NewEvent","A new event was created");
                             Log.d("NewEvent","A new event was created");
-                            Log.d("NewEvent","A new event was created");
+
+                            StrictMode.ThreadPolicy policy = new
+                                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+                            setThreadPolicy(policy);
 
                             // Produce the output
                             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -127,6 +154,7 @@ public class NewEventActivity extends ActionBarActivity {
                             }
                             try {
                                 writer.write(eventToSend.getJSON().toString());
+                                writer.flush();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -134,9 +162,9 @@ public class NewEventActivity extends ActionBarActivity {
 
                             // Create the request
                             HttpPost request = new HttpPost("http://10.0.2.2:8000/addEvent");
+                            request.setHeader("Content-Type", "application/json");
                             request.setEntity(new ByteArrayEntity(out.toByteArray()));
 
-                            request.addHeader("Content-Type", "application/json");
                             // Send the request
                             DefaultHttpClient client = new DefaultHttpClient();
                             try {

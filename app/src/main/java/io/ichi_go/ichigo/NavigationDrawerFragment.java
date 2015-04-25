@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -49,6 +50,7 @@ public class NavigationDrawerFragment extends Fragment {
     private LayoutInflater inflater2;
     public static ArrayList<Event> biblio = new ArrayList<Event>();
     private int menuflag = 0;
+    private ArrayList<Event> listOfEvents;
 
     private android.support.v7.widget.Toolbar toolbar2;
 
@@ -148,7 +150,6 @@ if(menuflag == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(getActivity(), AddressActivity.class));
                     }
                 });
             }
@@ -258,18 +259,16 @@ if(menuflag == 0) {
     DisplayEvent.setDesciption(biblio.get(position).getDescription());
 
 
+    final Event currentEvent = biblio.get(position);
     new Thread(new Runnable() {
         @Override
         public void run() {
-            try {
-                Thread.sleep(700);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    startActivity(new Intent(getActivity(), DisplayEventActivity.class));
+                    Intent i = new Intent(getActivity(), DisplayEventActivity.class);
+                    i.putExtra("currentEvent", currentEvent);
+                    startActivity(i);
                 }
             });
         }
@@ -366,12 +365,13 @@ if(menuflag == 0) {
         containerView = getActivity().findViewById(fragmentID);
         mDrawerLayout = drawerLayout;
         toolbar2 = toolbar;
-
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar2, R.string.drawer_open, R.string.drawer_close) {
            // mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 if (!mUserLearnedDrawer) {
                     mUserLearnedDrawer = true;
                     saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
@@ -396,6 +396,7 @@ if(menuflag == 0) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 getActivity().invalidateOptionsMenu();
 
                 Activity activity123 = getActivity();
