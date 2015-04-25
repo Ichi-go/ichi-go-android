@@ -21,7 +21,7 @@ public class Event implements Comparable<Event> {
 
     //private String location;
 
-    Event(String id, String name, String description, String latitude, String longitude, String location){
+    public Event(String id, String name, String description, String latitude, String longitude, String location){
         this.name = name;
         this.description = description;
         this.latitude = latitude;
