@@ -4,20 +4,22 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     tools:context="io.ichi_go.ichigo.ChannelDrawerFragment"
-    android:background="#EEE">
+    android:background="@color/colorHighlight">
     
     <TextView
-        android:background="@color/colorHighlight"
+        android:background="#EEE"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
         android:gravity="center"
         android:id="@+id/channel_drawer_header"
         android:layout_width="match_parent"
-        android:layout_height=""
+        android:layout_height="56dp"
         android:text="Channels"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="@color/colorAccent"/>
+
+
 
     <ExpandableListView
         android:layout_below="@id/channel_drawer_header"
