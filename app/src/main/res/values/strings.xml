@@ -35,6 +35,7 @@
     <string name="title_activity_my_events">Intro message</string>
     <string name="title_activity_address">Intro message</string>
     <string name="title_activity_sample_activity_base">Intro message</string>
+    <string name="title_activity_display_all_events">All Events</string>
     <!--Make these meaningful-->
 
 
