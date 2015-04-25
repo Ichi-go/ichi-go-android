@@ -88,11 +88,14 @@ public class MapsActivity extends ActionBarActivity implements
         opt = getSupportActionBar().getDisplayOptions();
         Log.d("Maps","onStart");
         Log.d("Maps","onStart");
-        Log.d("Maps","onStart");
+        Log.d("Maps", "onStart");
         System.out.println(opt);
         NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+
+        ChannelDrawerFragment channelDrawerFragment = (ChannelDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_channel_drawer);
+        channelDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
     }
 

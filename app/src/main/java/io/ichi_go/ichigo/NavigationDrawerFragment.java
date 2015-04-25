@@ -41,14 +41,11 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private NavDrawerAdapter adapter;
-    private boolean mUserLearnedDrawer;
-    private boolean mFromSavedInstanceState;
     private View containerView;
     private View layout2;
     private LayoutInflater inflater2;
     public static ArrayList<Event> biblio = new ArrayList<Event>();
     private int menuflag = 0;
-    private ArrayList<Event> listOfEvents;
 
     private android.support.v7.widget.Toolbar toolbar2;
 
@@ -60,12 +57,6 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLearnedDrawer = Boolean.valueOf(readFromPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, "false"));
-        if (savedInstanceState != null) {
-            mFromSavedInstanceState = true;
-        }
-
-
     }
 
     @Override
@@ -379,17 +370,13 @@ if(menuflag == 0) {
         containerView = getActivity().findViewById(fragmentID);
         mDrawerLayout = drawerLayout;
         toolbar2 = toolbar;
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar2, R.string.drawer_open, R.string.drawer_close) {
            // mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
-                }
+                //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
                         Activity activity123 = getActivity();
 
@@ -410,7 +397,7 @@ if(menuflag == 0) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 getActivity().invalidateOptionsMenu();
 
                 Activity activity123 = getActivity();
@@ -464,9 +451,6 @@ if(menuflag == 0) {
 
 
 
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(containerView);
-        }
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
             @Override

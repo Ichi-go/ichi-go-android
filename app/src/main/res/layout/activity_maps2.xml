@@ -12,13 +12,6 @@
         android:layout_height="match_parent"
         tools:context="io.ichi_go.ichigo.MapsActivity">
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/toast_text"
-            android:gravity="center_vertical|center_horizontal"
-            />
-
         <include
             android:id="@+id/app_bar"
             layout="@layout/app_bar" />
@@ -41,8 +34,17 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:layout="@layout/fragment_navigation_drawer"
         tools:layout="@layout/fragment_navigation_drawer" />
+
+    <fragment
+        android:id="@+id/fragment_channel_drawer"
+        android:name="io.ichi_go.ichigo.ChannelDrawerFragment"
+        android:layout_width="230dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        tools:layout="@layout/fragment_channel_drawer" />
+
+
 </android.support.v4.widget.DrawerLayout>
 
 

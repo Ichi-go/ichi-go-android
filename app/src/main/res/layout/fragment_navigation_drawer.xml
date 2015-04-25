@@ -15,7 +15,7 @@
         android:clickable="true"
         android:id="@+id/image_placeholder"
         android:layout_below="@id/app_bar_space"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:src="@drawable/ratio16x9"
@@ -23,8 +23,8 @@
 
     <FrameLayout
         android:clickable="true"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/image_placeholder"
         android:background="#EEE"
         >
