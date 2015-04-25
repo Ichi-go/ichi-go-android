@@ -1,4 +1,4 @@
-package io.ichi_go.ichigo;
+package io.ichi_go.ichigo.data.model;
 
 import com.google.android.gms.maps.model.LatLng;
 

@@ -28,6 +28,8 @@ import com.daimajia.androidanimations.library.YoYo;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.ichi_go.ichigo.data.model.Event;
+
 
 /**
  * A simple {@link Fragment} subclass.
