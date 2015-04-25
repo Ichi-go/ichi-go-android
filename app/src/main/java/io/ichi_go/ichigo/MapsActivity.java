@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -182,6 +185,34 @@ public class MapsActivity extends ActionBarActivity implements
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
+
+            //Set the customized marker window
+            if (mMap != null) {
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        View view = getLayoutInflater().inflate(R.layout.marker_info_window, null);
+                        TextView infoName = (TextView) view.findViewById(R.id.marker_info_name);
+                        TextView infoLat = (TextView) view.findViewById(R.id.marker_info_latitude);
+                        TextView infoLong = (TextView) view.findViewById(R.id.marker_info_longitude);
+
+                        LatLng latLng = marker.getPosition();
+
+                        infoName.setText(marker.getTitle());
+                        infoLat.setText("Latitude: " + latLng.latitude);
+                        infoLong.setText("Longitude: " + latLng.longitude);
+
+                        return view;
+                    }
+                });
+            }
+
+
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
@@ -191,6 +222,7 @@ public class MapsActivity extends ActionBarActivity implements
         UiSettings mapSettings;
         mapSettings = mMap.getUiSettings();
         mapSettings.setZoomControlsEnabled(true);
+        mapSettings.setMyLocationButtonEnabled(true);
 
 
 
