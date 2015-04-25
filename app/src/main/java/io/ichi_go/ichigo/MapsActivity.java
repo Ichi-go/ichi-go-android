@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -43,6 +44,8 @@ public class MapsActivity extends ActionBarActivity implements
     private LocationRequest mLocationRequest;
 
     private android.support.v7.widget.Toolbar toolbar;
+    ChannelDrawerFragment channelDrawerFragment;
+    NavigationDrawerFragment drawerFragment;
 
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -88,11 +91,14 @@ public class MapsActivity extends ActionBarActivity implements
         opt = getSupportActionBar().getDisplayOptions();
         Log.d("Maps","onStart");
         Log.d("Maps","onStart");
-        Log.d("Maps","onStart");
+        Log.d("Maps", "onStart");
         System.out.println(opt);
-        NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
+        drawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
+
+        channelDrawerFragment = (ChannelDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_channel_drawer);
+        channelDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
     }
 
@@ -113,6 +119,9 @@ public class MapsActivity extends ActionBarActivity implements
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_channel_drawer) {
+            ((DrawerLayout) findViewById(R.id.drawer_layout)).openDrawer(Gravity.RIGHT);
         }
 
         return super.onOptionsItemSelected(item);

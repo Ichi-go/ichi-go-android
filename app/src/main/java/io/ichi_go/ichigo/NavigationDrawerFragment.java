@@ -41,14 +41,11 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private NavDrawerAdapter adapter;
-    private boolean mUserLearnedDrawer;
-    private boolean mFromSavedInstanceState;
     private View containerView;
     private View layout2;
     private LayoutInflater inflater2;
     public static ArrayList<Event> biblio = new ArrayList<Event>();
     private int menuflag = 0;
-    private ArrayList<Event> listOfEvents;
 
     private android.support.v7.widget.Toolbar toolbar2;
 
@@ -60,12 +57,6 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLearnedDrawer = Boolean.valueOf(readFromPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, "false"));
-        if (savedInstanceState != null) {
-            mFromSavedInstanceState = true;
-        }
-
-
     }
 
     @Override
@@ -244,7 +235,23 @@ if(menuflag == 0) {
                 .duration(700)
                 .playOn(layout.findViewById(R.id.drawer_list));
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getActivity(), DisplayAllEventsActivity.class));
+                    }
+                });
+            }
 
+        }).start();
     }
 
 }else {
@@ -291,7 +298,7 @@ if(menuflag == 0) {
 
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "Address", "My Events 3", "Test 4"};
+        String[] titles = {"New Event", "Address", "My Events 3", "Expandable List View"};
         for (int i = 0; i < titles.length; i++) {
             NavItem current = new NavItem();
             current.iconId = R.drawable.ic_launcher_strawberry;
@@ -370,10 +377,6 @@ if(menuflag == 0) {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, mUserLearnedDrawer + "");
-                }
 
                         Activity activity123 = getActivity();
 
@@ -448,9 +451,6 @@ if(menuflag == 0) {
 
 
 
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(containerView);
-        }
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.post(new Runnable() {
             @Override

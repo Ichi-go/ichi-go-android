@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="io.ichi_go.ichigo.MapsActivity">
     <item
+        android:id="@+id/action_channel_drawer"
+        android:icon="@drawable/ic_action_important"
+        android:title="action_channel_drawer"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
