@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     tools:context="io.ichi_go.ichigo.ChannelDrawerFragment"
-    android:background="@color/colorHighlight">
+    android:background="@color/colorHighlight"
+    android:clickable="true">
     
     <TextView
         android:background="#EEE"

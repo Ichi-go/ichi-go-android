@@ -370,13 +370,13 @@ if(menuflag == 0) {
         containerView = getActivity().findViewById(fragmentID);
         mDrawerLayout = drawerLayout;
         toolbar2 = toolbar;
-        //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar2, R.string.drawer_open, R.string.drawer_close) {
            // mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
                         Activity activity123 = getActivity();
 
@@ -397,7 +397,7 @@ if(menuflag == 0) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 getActivity().invalidateOptionsMenu();
 
                 Activity activity123 = getActivity();
