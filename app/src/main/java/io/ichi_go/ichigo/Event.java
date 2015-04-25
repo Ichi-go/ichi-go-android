@@ -1,5 +1,8 @@
 package io.ichi_go.ichigo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
@@ -8,7 +11,7 @@ import org.json.JSONObject;
 /**
  * Created by russell on 2/22/15.
  */
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event>, Parcelable {
     private String name = "";
     private String description;
     private String latitude;
@@ -148,6 +151,41 @@ public class Event implements Comparable<Event> {
             e.printStackTrace();
         }
         return jso;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(latitude);
+        dest.writeString(longitude);
+        dest.writeString(location);
+    }
+
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+
+    };
+
+    public Event(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        description = in.readString();
+        latitude = in.readString();
+        longitude = in.readString();
+        location = in.readString();
     }
 
 }
