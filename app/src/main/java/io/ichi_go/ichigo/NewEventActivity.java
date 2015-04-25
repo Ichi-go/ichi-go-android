@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -28,6 +29,7 @@ import java.io.Writer;
 
 import static android.os.StrictMode.setThreadPolicy;
 import static io.ichi_go.ichigo.R.id.event_description;
+import static io.ichi_go.ichigo.R.id.event_location;
 import static io.ichi_go.ichigo.R.id.event_name;
 
 
@@ -73,6 +75,13 @@ public class NewEventActivity extends ActionBarActivity {
     public void createEvent(View v) {
         if(v.getId() == R.id.create_event_button) {
 
+            if(String.valueOf(((EditText) findViewById(R.id.event_name)).getText()).isEmpty()){
+                Toast.makeText(this,
+                        "Please enter a name for the event",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             YoYo.with(Techniques.RotateOut)
                     .duration(700)
                     .playOn(findViewById(R.id.create_event_button));
@@ -96,13 +105,25 @@ public class NewEventActivity extends ActionBarActivity {
 
                             EditText etName = (EditText) findViewById(event_name);
                             EditText etDes = (EditText) findViewById(event_description);
+                            EditText etLoc = (EditText) findViewById(event_location);
                             String eName = String.valueOf(etName.getText());
                             String eDes = String.valueOf(etDes.getText());
+                            String eLoc = String.valueOf(etLoc.getText());
 
-                            NewEventLocation.setName(String.valueOf(etName.getText()));
-                            NewEventLocation.setDescription(String.valueOf(etDes.getText()));
+                            //Give default string values if they are empty
+                            if (eDes.isEmpty()) {
+                                eDes = "No description.";
+                            }
+                            if (eLoc.isEmpty()) {
+                                eLoc = "No location specified.";
+                            }
 
-                            Event eventToSend = new Event("0", eName, eDes, NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), NewEventLocation.getLocation());
+
+                            NewEventLocation.setName(eName);
+                            NewEventLocation.setDescription(eDes);
+                            NewEventLocation.setLocation(eLoc);
+
+                            Event eventToSend = new Event("0", eName, eDes, NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), eLoc);
                             UpdateFlag.setChooseLoc(1);
 
                             LatLng latLng = CurrentLocation.getLatLng();

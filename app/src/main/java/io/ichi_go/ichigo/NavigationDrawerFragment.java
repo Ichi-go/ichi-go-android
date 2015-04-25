@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -47,6 +48,7 @@ public class NavigationDrawerFragment extends Fragment {
     private LayoutInflater inflater2;
     public static ArrayList<Event> biblio = new ArrayList<Event>();
     private int menuflag = 0;
+    private ArrayList<Event> listOfEvents;
 
     private android.support.v7.widget.Toolbar toolbar2;
 
@@ -255,18 +257,16 @@ if(menuflag == 0) {
     DisplayEvent.setDesciption(biblio.get(position).getDescription());
 
 
+    final Event currentEvent = biblio.get(position);
     new Thread(new Runnable() {
         @Override
         public void run() {
-            try {
-                Thread.sleep(700);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    startActivity(new Intent(getActivity(), DisplayEventActivity.class));
+                    Intent i = new Intent(getActivity(), DisplayEventActivity.class);
+                    i.putExtra("currentEvent", currentEvent);
+                    startActivity(i);
                 }
             });
         }

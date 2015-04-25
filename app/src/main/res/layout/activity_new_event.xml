@@ -34,15 +34,26 @@
             android:hint="@string/event_description"
             app:floatingLabel="normal"/>
 
+        <com.rengwuxian.materialedittext.MaterialEditText
+            app:primaryColor="@color/colorAccent"
+            android:layout_below="@id/event_description"
+            android:id="@+id/event_location"
+            android:layout_width="fill_parent"
+            android:layout_height="72dp"
+            android:hint="@string/event_location"
+            app:floatingLabel="normal"/>
+
+
         <Button
             android:id="@+id/create_event_button"
-            android:layout_below="@id/event_description"
+            android:layout_below="@id/event_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:text="@string/create_event"
             android:onClick="createEvent"/>
 
-        </RelativeLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>
