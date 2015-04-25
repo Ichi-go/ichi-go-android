@@ -1,5 +1,6 @@
 package io.ichi_go.ichigo;
 
+import android.os.StrictMode;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import static android.os.StrictMode.setThreadPolicy;
 import static io.ichi_go.ichigo.R.id.event_description;
 import static io.ichi_go.ichigo.R.id.event_name;
 
@@ -108,12 +110,16 @@ public class NewEventActivity extends ActionBarActivity {
                             SQLdb entry = new SQLdb(NewEventActivity.this);
                             entry.open();
                             entry.createEntry(eName, eDes, NewEventLocation.getLatitude(),NewEventLocation.getLongitude(), NewEventLocation.getLocation());
-                            entry.writeCentral();
+//                            entry.writeCentral();
                             entry.close();
 
+                            Log.d("NewEvent", "A new event was created");
                             Log.d("NewEvent","A new event was created");
                             Log.d("NewEvent","A new event was created");
-                            Log.d("NewEvent","A new event was created");
+
+                            StrictMode.ThreadPolicy policy = new
+                                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+                            setThreadPolicy(policy);
 
                             // Produce the output
                             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -125,6 +131,7 @@ public class NewEventActivity extends ActionBarActivity {
                             }
                             try {
                                 writer.write(eventToSend.getJSON().toString());
+                                writer.flush();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -132,9 +139,9 @@ public class NewEventActivity extends ActionBarActivity {
 
                             // Create the request
                             HttpPost request = new HttpPost("http://10.0.2.2:8000/addEvent");
+                            request.setHeader("Content-Type", "application/json");
                             request.setEntity(new ByteArrayEntity(out.toByteArray()));
 
-                            request.addHeader("Content-Type", "application/json");
                             // Send the request
                             DefaultHttpClient client = new DefaultHttpClient();
                             try {

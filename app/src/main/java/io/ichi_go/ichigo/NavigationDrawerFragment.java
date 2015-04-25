@@ -146,7 +146,6 @@ if(menuflag == 0) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(getActivity(), AddressActivity.class));
                     }
                 });
             }

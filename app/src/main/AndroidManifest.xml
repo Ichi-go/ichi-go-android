@@ -61,13 +61,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MapsActivity" />
         </activity>
-        <activity
-            android:name=".AddressActivity"
-            android:label="@string/title_activity_address" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MapsActivity" />
-        </activity>
 
         <activity
             android:name=".SampleActivityBase"

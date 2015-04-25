@@ -139,8 +139,8 @@ public class Event implements Comparable<Event> {
         JSONObject jso = new JSONObject();
         try {
 
-            jso.put("longitude", this.getLongitude());
-            jso.put("latitude", this.getLatitude());
+            jso.put("longitude", Double.valueOf(this.getLongitude()));
+            jso.put("latitude", Double.valueOf(this.getLatitude()));
             jso.put("name", this.getName());
             jso.put("description", this.getDescription());
             jso.put("location", this.getLocation());
