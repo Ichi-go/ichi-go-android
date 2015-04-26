@@ -10,6 +10,10 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
@@ -18,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -27,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.ichi_go.ichigo.data.model.Event;
@@ -43,6 +49,7 @@ public class MapsActivity extends ActionBarActivity implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private HashMap<String, Event> markerHashmap;
 
     private android.support.v7.widget.Toolbar toolbar;
     ChannelDrawerFragment channelDrawerFragment;
@@ -55,6 +62,7 @@ public class MapsActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
+        markerHashmap = new HashMap<>();
         setUpMapIfNeeded();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -76,9 +84,9 @@ public class MapsActivity extends ActionBarActivity implements
 //        info.initDB();
 //        info.populate();
         info.close();
+        Log.d("DB", "Update DB");
         Log.d("DB","Update DB");
-        Log.d("DB","Update DB");
-        Log.d("DB","Update DB");
+        Log.d("DB", "Update DB");
 
     }
     @Override
@@ -91,7 +99,7 @@ public class MapsActivity extends ActionBarActivity implements
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         opt = getSupportActionBar().getDisplayOptions();
         Log.d("Maps","onStart");
-        Log.d("Maps","onStart");
+        Log.d("Maps", "onStart");
         Log.d("Maps", "onStart");
         System.out.println(opt);
         drawerFragment = (NavigationDrawerFragment)
@@ -183,6 +191,43 @@ public class MapsActivity extends ActionBarActivity implements
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
+
+            //Set the customized marker window
+            if (mMap != null) {
+                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker marker) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker marker) {
+                        View view = getLayoutInflater().inflate(R.layout.marker_info_window, null);
+                        TextView infoName = (TextView) view.findViewById(R.id.marker_info_name);
+
+                        LatLng latLng = marker.getPosition();
+
+                        infoName.setText(marker.getTitle());
+
+                        return view;
+                    }
+                });
+
+                mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+
+                        Event currentEvent = markerHashmap.get(marker.getId());
+                        if (currentEvent != null) {
+                            Intent i = new Intent(MapsActivity.this, DisplayEventActivity.class);
+                            i.putExtra("currentEvent", currentEvent);
+                            startActivity(i);
+                        }
+                    }
+                });
+            }
+
+
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
@@ -192,6 +237,7 @@ public class MapsActivity extends ActionBarActivity implements
         UiSettings mapSettings;
         mapSettings = mMap.getUiSettings();
         mapSettings.setZoomControlsEnabled(true);
+        mapSettings.setMyLocationButtonEnabled(true);
 
 
 
@@ -204,7 +250,6 @@ public class MapsActivity extends ActionBarActivity implements
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         Double lat = new Double(CurrentLocation.getLatitude());
         Double lon = new Double(CurrentLocation.getLongitude());
         String name = CurrentLocation.getName();
@@ -250,8 +295,8 @@ public class MapsActivity extends ActionBarActivity implements
              lat = new Double(sco2.getLatitude());
              lon = new Double(sco2.getLongitude());
 
-            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(name2));
-
+            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(name2));
+            markerHashmap.put(marker.getId(),sco2);
         }
 
         Log.d("Maps","setUpMap");
