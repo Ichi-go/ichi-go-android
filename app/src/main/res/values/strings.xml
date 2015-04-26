@@ -2,40 +2,20 @@
 <resources>
     <string name="google_maps_key_debug">AIzaSyAw-ryYtUAa2gNpMvAcINhzRVwRHsO1ymY</string>
     <string name="app_name">Ichi-go</string>
-    <string name="title_activity_main">Ichi-go</string>
     <string name="title_activity_new_event">Create New Event</string>
-    <string name="title_activity_view_event">View an Event</string>
+    <string name="title_activity_maps">Ichi-go</string>
+    <string name="title_activity_display_event">Display Event</string>
     <string name="action_settings">Settings</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+
     <string name="event_name">Event Name</string>
     <string name="event_description">Description</string>
-    <string name="create_event">Create Event</string>
-    <string name="edit_event">Edit Event</string>
-
     <string name="event_location">Location</string>
+    <string name="create_event">Create Event</string>
 
     <string name="strDelete">Delete</string>
     <string name="strEdit">Edit</string>
-    <string name="strDummyDescription">This is where the description goes!</string>
-    <string name="strDummyName">Event Name</string>
-
-    <string name="hello_world">Hello world!</string>
-
-
-    <!--Make these meaningful-->
-    <string name="intro_message">Intro message1</string>
-    <string name="autocomplete_hint">Autocomplete Hint</string>
-    <string name="clear_text">Clear Text</string>
-    <string name="selected_place">Selected Place</string>
-    <string name="title_activity_maps">Ichi-go</string>
-    <string name="title_activity_display_event">Intro message2</string>
-    <string name="title_activity_my_events">Intro message3</string>
-    <string name="title_activity_address">Intro message4</string>
-    <string name="title_activity_sample_activity_base">Intro message5</string>
-    <string name="title_activity_display_all_events">All Events</string>
-    <!--Make these meaningful-->
-
 
 </resources>
