@@ -12,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
@@ -35,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
 public class MapsActivity extends ActionBarActivity implements
@@ -44,26 +43,40 @@ public class MapsActivity extends ActionBarActivity implements
         OnMapClickListener,
         OnMapLongClickListener {
 
-    public static LatLng latLng;
     public static final String TAG = MapsActivity.class.getSimpleName();
+    private final LatLng LOCATION_SOCORRO = new LatLng(34.0617, -106.8994);
+    private final LatLng LOCATION_NMT = new LatLng(34.0668, -106.9056);
+    private final Integer MARKER_NAME_LENGTH = 15;
+
+    //Map Variables
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private HashMap<String, Event> markerHashmap;
+    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
+    //Layout Variables
     private android.support.v7.widget.Toolbar toolbar;
     ChannelDrawerFragment channelDrawerFragment;
     NavigationDrawerFragment drawerFragment;
 
-
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    //Event Management Variables
+    private ArrayList<Event> listOfEvents;
+    private EventManager eventManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps2);
+
+        eventManager = EventManager.getInstance();
+        //Make this check for current location instead of static value
+        eventManager.loadEvents(LOCATION_NMT.latitude, LOCATION_NMT.longitude);
+        listOfEvents = eventManager.getEvents();
+
         markerHashmap = new HashMap<>();
         setUpMapIfNeeded();
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -77,38 +90,21 @@ public class MapsActivity extends ActionBarActivity implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
-
-        SQLdb info = new SQLdb(this);
-        info.open();
-        info.dumpDB();
-//        info.initDB();
-//        info.populate();
-        info.close();
-        Log.d("DB", "Update DB");
-        Log.d("DB","Update DB");
-        Log.d("DB", "Update DB");
-
     }
+
     @Override
     protected void onStart() {
         super.onStart();
 
-        int opt;
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        opt = getSupportActionBar().getDisplayOptions();
-        Log.d("Maps","onStart");
-        Log.d("Maps", "onStart");
-        Log.d("Maps", "onStart");
-        System.out.println(opt);
-        drawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+
+        drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
         channelDrawerFragment = (ChannelDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_channel_drawer);
         channelDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
-
     }
 
     @Override
@@ -149,13 +145,13 @@ public class MapsActivity extends ActionBarActivity implements
 //        info.initDB();
 //        info.populate();
         info.close();
-        Log.d("DB","Update DB");
-        Log.d("DB","Update DB");
-        Log.d("DB","Update DB");
+        Log.d("DB", "Update DB");
+        Log.d("DB", "Update DB");
+        Log.d("DB", "Update DB");
 
-        Log.d("Maps","onResume");
-        Log.d("Maps","onResume");
-        Log.d("Maps","onResume");
+        Log.d("Maps", "onResume");
+        Log.d("Maps", "onResume");
+        Log.d("Maps", "onResume");
 
     }
 
@@ -205,8 +201,6 @@ public class MapsActivity extends ActionBarActivity implements
                         View view = getLayoutInflater().inflate(R.layout.marker_info_window, null);
                         TextView infoName = (TextView) view.findViewById(R.id.marker_info_name);
 
-                        LatLng latLng = marker.getPosition();
-
                         infoName.setText(marker.getTitle());
 
                         return view;
@@ -216,7 +210,6 @@ public class MapsActivity extends ActionBarActivity implements
                 mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     @Override
                     public void onInfoWindowClick(Marker marker) {
-
                         Event currentEvent = markerHashmap.get(marker.getId());
                         if (currentEvent != null) {
                             Intent i = new Intent(MapsActivity.this, DisplayEventActivity.class);
@@ -238,9 +231,6 @@ public class MapsActivity extends ActionBarActivity implements
         mapSettings = mMap.getUiSettings();
         mapSettings.setZoomControlsEnabled(true);
         mapSettings.setMyLocationButtonEnabled(true);
-
-
-
     }
 
     /**
@@ -250,59 +240,24 @@ public class MapsActivity extends ActionBarActivity implements
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        Double lat = new Double(CurrentLocation.getLatitude());
-        Double lon = new Double(CurrentLocation.getLongitude());
-        String name = CurrentLocation.getName();
-        mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(name));
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
 
-        List<NavItem> data = new ArrayList<>();
-
-
-        SQLdb info = new SQLdb(this);
-        info.open();
-
-        ArrayList<Event> biblio2 = info.getData2();
-
-        info.dumpDB();
-
-//        if(UpdateFlag.getUpdate() == 1) {
-//        info.initDB();
-
-//        }
-//
-//        info.populate();
-
-        info.close();
-
-
-        Event sco2;
-        String name2;
-
-        int len1 = 14;
-
-
-        for (int i = 0; i < biblio2.size(); i++) {
-            len1 = 14;
-            sco2 = biblio2.get(i);
-            if (sco2.getName().length() < len1) {
-                len1 = sco2.getName().length();
+        Double lat;
+        Double lng;
+        String name;
+        for (Event e : listOfEvents) {
+            lat = Double.valueOf(e.getLatitude());
+            lng = Double.valueOf(e.getLongitude());
+            name = e.getName();
+            if (name.length() > MARKER_NAME_LENGTH) {
+                name = name.substring(0, MARKER_NAME_LENGTH);
             }
 
-            name2 = String.format("%-15s", sco2.getName().substring(0, len1));
-
-             lat = new Double(sco2.getLatitude());
-             lon = new Double(sco2.getLongitude());
-
-            Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(name2));
-            markerHashmap.put(marker.getId(),sco2);
+            MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
+            Marker marker = mMap.addMarker(markerOptions);
+            markerHashmap.put(marker.getId(), e);
         }
-
-        Log.d("Maps","setUpMap");
-        Log.d("Maps","setUpMap");
-        Log.d("Maps","setUpMap");
-
     }
 
     @Override
@@ -315,35 +270,13 @@ public class MapsActivity extends ActionBarActivity implements
         } else {
             handleNewLocation(location);
         }
-        ;
 
         Log.i(TAG, "Location services connected.");
-
-
-        SQLdb info = new SQLdb(this);
-        info.open();
-        info.dumpDB();
-//        info.initDB();
-//        info.populate();
-        info.close();
-        Log.d("DB","Update DB");
-        Log.d("DB","Update DB");
-        Log.d("DB","Update DB");
-
-        Log.d("Maps","onConnected");
-        Log.d("Maps","onConnected");
-        Log.d("Maps","onConnected");
-
-//        if(UpdateFlag.getChooseLoc() == 1) {
-//            Toast.makeText(this,
-//                    "Please choose a location for event",
-//                    Toast.LENGTH_SHORT).show();
-//        }
     }
 
     protected void startLocationUpdates() {
         LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, (com.google.android.gms.location.LocationListener) this);
+                mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
@@ -367,21 +300,15 @@ public class MapsActivity extends ActionBarActivity implements
 
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
+        Double currentLatitude = location.getLatitude();
+        Double currentLongitude = location.getLongitude();
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
+        //
+        // Do Something with this class
+        //
         CurrentLocation.setLatLng(latLng);
 
-
-        Log.d("Maps", "current location set");
-        Log.d("Maps","current location set");
-        Log.d("Maps","current location set");
-
-        MarkerOptions options = new MarkerOptions()
-                .position(latLng)
-                .title("I am here!");
-        mMap.addMarker(options);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
@@ -389,51 +316,20 @@ public class MapsActivity extends ActionBarActivity implements
     @Override
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
-
     }
-
-
 
 
     @Override
     public void onMapClick(LatLng latLng) {
 
-//        if(UpdateFlag.getChooseLoc() == 1){
-//
-//
-//            NewEventLocation.setLatitude(latLng.latitude);
-//            NewEventLocation.setLongitude(latLng.longitude);
-//
-//            SQLdb entry = new SQLdb(MapsActivity.this);
-//            entry.open();
-//            entry.createEntry(NewEventLocation.getName(), NewEventLocation.getDescription(), NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), NewEventLocation.getLocation());
-//            entry.close();
-//
-//            UpdateFlag.setChooseLoc(0);
-//
-//            mMap.addMarker(new MarkerOptions().position(latLng).title(NewEventLocation.getName()));
-//
-//        }
-//
-//        Log.d("Maps","onMapClick");
-//        Log.d("Maps","onMapClick");
-//        Log.d("Maps","onMapClick");
-
-
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
+        Intent i = new Intent(this, NewEventActivity.class);
+        i.putExtra("latitude", latLng.latitude);
+        i.putExtra("longitude", latLng.longitude);
 
-        NewEventLocation.setLatitude(latLng.latitude);
-        NewEventLocation.setLongitude(latLng.longitude);
-
-        Log.d("Maps","onMapLongClick");
-        Log.d("Maps","onMapLongClick");
-        Log.d("Maps","onMapLongClick");
-
-
-        startActivity(new Intent(this, NewEventActivity.class));
-
+        startActivity(i);
     }
 }
