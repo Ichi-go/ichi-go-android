@@ -138,21 +138,6 @@ public class MapsActivity extends ActionBarActivity implements
         super.onResume();
         setUpMapIfNeeded();
         mGoogleApiClient.connect();
-
-        SQLdb info = new SQLdb(this);
-        info.open();
-        info.dumpDB();
-//        info.initDB();
-//        info.populate();
-        info.close();
-        Log.d("DB", "Update DB");
-        Log.d("DB", "Update DB");
-        Log.d("DB", "Update DB");
-
-        Log.d("Maps", "onResume");
-        Log.d("Maps", "onResume");
-        Log.d("Maps", "onResume");
-
     }
 
     @Override
@@ -302,14 +287,9 @@ public class MapsActivity extends ActionBarActivity implements
 
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
-        Double currentLatitude = location.getLatitude();
-        Double currentLongitude = location.getLongitude();
-        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-
-        //
-        // Do Something with this class
-        //
-        CurrentLocation.setLatLng(latLng);
+        Double lat = location.getLatitude();
+        Double lng = location.getLongitude();
+        LatLng latLng = new LatLng(lat, lng);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }

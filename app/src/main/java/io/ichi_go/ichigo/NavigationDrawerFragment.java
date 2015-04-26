@@ -75,7 +75,7 @@ public class NavigationDrawerFragment extends Fragment {
                                             "Click and hold to choose location",
                                             Toast.LENGTH_SHORT).show();
 
-                                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                                    mDrawerLayout.closeDrawer(Gravity.START);
                                 }
                             });
                         }
