@@ -61,7 +61,7 @@ public class MapsActivity extends ActionBarActivity implements
     NavigationDrawerFragment drawerFragment;
 
     //Event Management Variables
-    private ArrayList<Event> listOfEvents;
+    private ArrayList<Event> listOfEvents = new ArrayList<>();
     private EventManager eventManager;
 
     @Override
@@ -250,9 +250,11 @@ public class MapsActivity extends ActionBarActivity implements
             lat = Double.valueOf(e.getLatitude());
             lng = Double.valueOf(e.getLongitude());
             name = e.getName();
+            System.out.println("Name of Loaded Event: " + name);
             if (name.length() > MARKER_NAME_LENGTH) {
                 name = name.substring(0, MARKER_NAME_LENGTH);
             }
+            System.out.println("Name after trim: " + name);
 
             MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
             Marker marker = mMap.addMarker(markerOptions);

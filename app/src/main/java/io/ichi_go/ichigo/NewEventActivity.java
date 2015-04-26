@@ -52,10 +52,10 @@ public class NewEventActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        newEvent = new Event("","","","","","");
+        newEvent = new Event("", "", "", "", "", "");
 
         Intent i = getIntent();
-        if(i != null){
+        if (i != null) {
             newEvent.setLatitude(i.getStringExtra("latitude"));
             newEvent.setLongitude(i.getStringExtra("longitude"));
         }
@@ -103,30 +103,43 @@ public class NewEventActivity extends ActionBarActivity {
                     .duration(700)
                     .playOn(findViewById(R.id.create_event_button));
 
-            try {
-                wait(700);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(700);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    NewEventActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EditText etName = (EditText) findViewById(event_name);
+                            EditText etDes = (EditText) findViewById(event_description);
+                            EditText etLoc = (EditText) findViewById(event_location);
+                            newEvent.setName(String.valueOf(etName.getText()));
+                            newEvent.setDescription(String.valueOf(etDes.getText()));
+                            newEvent.setLocation(String.valueOf(etLoc.getText()));
 
-            EditText etName = (EditText) findViewById(event_name);
-            EditText etDes = (EditText) findViewById(event_description);
-            EditText etLoc = (EditText) findViewById(event_location);
-            newEvent.setName(String.valueOf(etName.getText()));
-            newEvent.setName(String.valueOf(etDes.getText()));
-            newEvent.setName(String.valueOf(etLoc.getText()));
+                            //Give default string values if they are empty
+                            if (newEvent.getDescription().isEmpty()) {
+                                System.out.println("Setting Description");
+                                newEvent.setDescription("No description.");
+                            }
+                            if (newEvent.getLocation().isEmpty()) {
+                                newEvent.setLocation("No location specified.");
+                            }
 
-            //Give default string values if they are empty
-            if (newEvent.getDescription().isEmpty()) {
-                newEvent.setDescription("No description.");
-            }
-            if (newEvent.getLocation().isEmpty()) {
-                newEvent.setLocation("No location specified.");
-            }
+                            EventManager eventManager = EventManager.getInstance();
+                            eventManager.addEvent(newEvent);
 
-            EventManager eventManager = EventManager.getInstance();
-            eventManager.addEvent(newEvent);
+                            NavUtils.navigateUpFromSameTask(NewEventActivity.this);
+                        }
+                    });
+                }
+
+            }).start();
+
         }
     }
 }
-

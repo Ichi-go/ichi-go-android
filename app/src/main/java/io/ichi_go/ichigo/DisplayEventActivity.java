@@ -37,7 +37,6 @@ public class DisplayEventActivity extends ActionBarActivity {
         displayName.setText(currentEvent.getName());
         displayDescription.setText(currentEvent.getDescription());
 
-
     }
 
     @Override
