@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import io.ichi_go.ichigo.data.model.Event;
+
 /**
  * Created by ichigo on 4/25/15.
  */
