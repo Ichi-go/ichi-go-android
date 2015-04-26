@@ -24,16 +24,16 @@ public class Event implements Comparable<Event>, Parcelable {
 
     //private String location;
 
-    public Event(String id, String name, String description, String latitude, String longitude, String location){
+    public Event(String id, String name, String description, String latitude, String longitude, String location) {
         this.name = name;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
         this.location = location;
-      //  this.location = location;
+        //  this.location = location;
     }
 
-    public String printData(){
+    public String printData() {
         StringBuilder result = new StringBuilder();
         result.append(this.name);
         return result.toString();
@@ -44,7 +44,7 @@ public class Event implements Comparable<Event>, Parcelable {
     }
 
     public void setName(String name) {
-        this.name = String.format("%10s",name);
+        this.name = name;
     }
 
     public String getDescription() {
@@ -52,7 +52,7 @@ public class Event implements Comparable<Event>, Parcelable {
     }
 
     public void setDescription(String description) {
-        this.description = String.format("%10s",description);
+        this.description = description;
     }
 
     public LatLng getLatLng() {
@@ -98,7 +98,7 @@ public class Event implements Comparable<Event>, Parcelable {
     @Override
     public int compareTo(Event another) {
 
-    return this.getName().compareTo(another.getName());
+        return this.getName().compareTo(another.getName());
 
     }
 
