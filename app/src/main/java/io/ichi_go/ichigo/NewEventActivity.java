@@ -27,7 +27,9 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import io.ichi_go.ichigo.data.model.Event;
 import static android.os.StrictMode.setThreadPolicy;
+
 import static io.ichi_go.ichigo.R.id.event_description;
 import static io.ichi_go.ichigo.R.id.event_location;
 import static io.ichi_go.ichigo.R.id.event_name;

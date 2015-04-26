@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
@@ -29,6 +28,8 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.ichi_go.ichigo.data.model.Event;
 
 public class MapsActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,

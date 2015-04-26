@@ -1,4 +1,4 @@
-package io.ichi_go.ichigo;
+package io.ichi_go.ichigo.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -24,7 +24,7 @@ public class Event implements Comparable<Event>, Parcelable {
 
     //private String location;
 
-    Event(String id, String name, String description, String latitude, String longitude, String location){
+    public Event(String id, String name, String description, String latitude, String longitude, String location){
         this.name = name;
         this.description = description;
         this.latitude = latitude;
