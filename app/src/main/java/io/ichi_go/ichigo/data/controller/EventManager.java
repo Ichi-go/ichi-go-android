@@ -1,5 +1,6 @@
 package io.ichi_go.ichigo.data.controller;
 
+import android.os.StrictMode;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -25,6 +26,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 
 import io.ichi_go.ichigo.data.model.Event;
+
+import static android.os.StrictMode.setThreadPolicy;
 
 /**
  * The event manager is a singleton that handles events and event accessories.
@@ -59,6 +62,10 @@ public class EventManager {
      * Load all the events you may currently see.
      */
     public void loadEvents(Double lat, Double lon) {
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        setThreadPolicy(policy);
+
         String url = "http://10.0.2.2:8000/getEvents";
         DefaultHttpClient client = new DefaultHttpClient();
         HttpPost request = new HttpPost(url);
@@ -101,6 +108,13 @@ public class EventManager {
      * @param event the event to add
      */
     public void addEvent(Event event) {
+
+        //TODO: change policy
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        setThreadPolicy(policy);
+
+
         HttpPost request = new HttpPost("http://10.0.2.2:8000/addEvent");
         DefaultHttpClient client = new DefaultHttpClient();
 
