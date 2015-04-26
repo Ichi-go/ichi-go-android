@@ -31,8 +31,6 @@ import io.ichi_go.ichigo.data.model.Event;
  * Created by ichigo on 4/25/15.
  */
 public class ChannelDrawerFragment extends Fragment {
-
-
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private LinkedHashMap<String, List<Event>> channelHashmap;
@@ -55,7 +53,6 @@ public class ChannelDrawerFragment extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_channel_drawer, container, false);
 
         EventManager eventManager = EventManager.getInstance();
-        //eventManager.loadEvents(34.0668,-106.9056);
         ArrayList<Event> listOfEvents = eventManager.getEvents();
 
         //Until Channel manager exists only have 2 channels
@@ -82,7 +79,6 @@ public class ChannelDrawerFragment extends Fragment {
                     @Override
                     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                                 int childPosition, long id) {
-
                         Intent i = new Intent(parent.getContext(), DisplayEventActivity.class);
                         i.putExtra("currentEvent", channelHashmap.get(channels.get(groupPosition)).get(childPosition));
                         startActivity(i);
@@ -96,19 +92,16 @@ public class ChannelDrawerFragment extends Fragment {
 
     public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
         mDrawerLayout = drawerLayout;
-        //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 getActivity().invalidateOptionsMenu();
             }
         };

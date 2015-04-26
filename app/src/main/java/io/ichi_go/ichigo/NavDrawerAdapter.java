@@ -35,8 +35,8 @@ public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         NavItem current = data.get(position);
-        holder.title.setText(current.title);
-        holder.icon.setImageResource(current.iconId);
+        holder.title.setText(current.getTitle());
+        holder.icon.setImageResource(current.getIconId());
     }
 
     @Override
