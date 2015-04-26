@@ -327,8 +327,8 @@ public class MapsActivity extends ActionBarActivity implements
     @Override
     public void onMapLongClick(LatLng latLng) {
         Intent i = new Intent(this, NewEventActivity.class);
-        i.putExtra("latitude", latLng.latitude);
-        i.putExtra("longitude", latLng.longitude);
+        i.putExtra("latitude", String.valueOf(latLng.latitude));
+        i.putExtra("longitude", String.valueOf(latLng.longitude));
 
         startActivity(i);
     }

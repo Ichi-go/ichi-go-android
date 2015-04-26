@@ -1,5 +1,6 @@
 package io.ichi_go.ichigo;
 
+import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
@@ -27,7 +28,9 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
+
 import static android.os.StrictMode.setThreadPolicy;
 
 import static io.ichi_go.ichigo.R.id.event_description;
@@ -37,15 +40,25 @@ import static io.ichi_go.ichigo.R.id.event_name;
 
 public class NewEventActivity extends ActionBarActivity {
 
+    private Event newEvent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        newEvent = new Event("","","","","","");
+
+        Intent i = getIntent();
+        if(i != null){
+            newEvent.setLatitude(i.getStringExtra("latitude"));
+            newEvent.setLongitude(i.getStringExtra("longitude"));
+        }
     }
 
     @Override
@@ -67,7 +80,7 @@ public class NewEventActivity extends ActionBarActivity {
             return true;
         }
 
-        if(id == android.R.id.home){
+        if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
         }
 
@@ -75,120 +88,45 @@ public class NewEventActivity extends ActionBarActivity {
     }
 
     public void createEvent(View v) {
-        if(v.getId() == R.id.create_event_button) {
+        if (v.getId() == R.id.create_event_button) {
 
-            if(String.valueOf(((EditText) findViewById(R.id.event_name)).getText()).isEmpty()){
+            //Don't allow new events to be created without a name
+            if (String.valueOf(((EditText) findViewById(R.id.event_name)).getText()).isEmpty()) {
                 Toast.makeText(this,
                         "Please enter a name for the event",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            //Button animation when clicked
             YoYo.with(Techniques.RotateOut)
                     .duration(700)
                     .playOn(findViewById(R.id.create_event_button));
 
+            try {
+                wait(700);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            final ActionBarActivity itself = this;
+            EditText etName = (EditText) findViewById(event_name);
+            EditText etDes = (EditText) findViewById(event_description);
+            EditText etLoc = (EditText) findViewById(event_location);
+            newEvent.setName(String.valueOf(etName.getText()));
+            newEvent.setName(String.valueOf(etDes.getText()));
+            newEvent.setName(String.valueOf(etLoc.getText()));
 
+            //Give default string values if they are empty
+            if (newEvent.getDescription().isEmpty()) {
+                newEvent.setDescription("No description.");
+            }
+            if (newEvent.getLocation().isEmpty()) {
+                newEvent.setLocation("No location specified.");
+            }
 
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(700);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            EditText etName = (EditText) findViewById(event_name);
-                            EditText etDes = (EditText) findViewById(event_description);
-                            EditText etLoc = (EditText) findViewById(event_location);
-                            String eName = String.valueOf(etName.getText());
-                            String eDes = String.valueOf(etDes.getText());
-                            String eLoc = String.valueOf(etLoc.getText());
-
-                            //Give default string values if they are empty
-                            if (eDes.isEmpty()) {
-                                eDes = "No description.";
-                            }
-                            if (eLoc.isEmpty()) {
-                                eLoc = "No location specified.";
-                            }
-
-
-                            NewEventLocation.setName(eName);
-                            NewEventLocation.setDescription(eDes);
-                            NewEventLocation.setLocation(eLoc);
-
-                            Event eventToSend = new Event("0", eName, eDes, NewEventLocation.getLatitude(), NewEventLocation.getLongitude(), eLoc);
-                            UpdateFlag.setChooseLoc(1);
-
-                            LatLng latLng = CurrentLocation.getLatLng();
-
-                            SQLdb entry = new SQLdb(NewEventActivity.this);
-                            entry.open();
-                            entry.createEntry(eName, eDes, NewEventLocation.getLatitude(),NewEventLocation.getLongitude(), NewEventLocation.getLocation());
-//                            entry.writeCentral();
-                            entry.close();
-
-                            Log.d("NewEvent", "A new event was created");
-                            Log.d("NewEvent","A new event was created");
-                            Log.d("NewEvent","A new event was created");
-
-                            StrictMode.ThreadPolicy policy = new
-                                    StrictMode.ThreadPolicy.Builder().permitAll().build();
-                            setThreadPolicy(policy);
-
-                            // Produce the output
-                            ByteArrayOutputStream out = new ByteArrayOutputStream();
-                            Writer writer = null;
-                            try {
-                                writer = new OutputStreamWriter(out, "UTF-8");
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                writer.write(eventToSend.getJSON().toString());
-                                writer.flush();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-
-                            // Create the request
-                            HttpPost request = new HttpPost("http://10.0.2.2:8000/addEvent");
-                            request.setHeader("Content-Type", "application/json");
-                            request.setEntity(new ByteArrayEntity(out.toByteArray()));
-
-                            // Send the request
-                            DefaultHttpClient client = new DefaultHttpClient();
-                            try {
-                                HttpResponse response = client.execute(request);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-
-
-
-                            NavUtils.navigateUpFromSameTask(itself);
-
-                        }
-                    });
-                }
-
-            }).start();
-
-
-
-
+            EventManager eventManager = EventManager.getInstance();
+            eventManager.addEvent(newEvent);
         }
     }
-
-
 }
+
