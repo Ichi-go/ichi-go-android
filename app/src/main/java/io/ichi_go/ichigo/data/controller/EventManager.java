@@ -91,7 +91,7 @@ public class EventManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        this.events = new ArrayList<>();
         this.loadEventsFromJSON(builder.toString());
     }
 
