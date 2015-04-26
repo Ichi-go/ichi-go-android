@@ -19,10 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
 /**
@@ -52,24 +54,20 @@ public class ChannelDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_channel_drawer, container, false);
 
-        //
-        //Temporary Way to populate list
-        //
-        SQLdb info = new SQLdb(getActivity());
-        info.open();
-        ArrayList<Event> listOfEvents = info.getData2();
-        info.dumpDB();
-        info.close();
+        EventManager eventManager = EventManager.getInstance();
+        //eventManager.loadEvents(34.0668,-106.9056);
+        ArrayList<Event> listOfEvents = eventManager.getEvents();
+
+        //Until Channel manager exists only have 2 channels
         ArrayList<Event> list1 = new ArrayList<>();
         ArrayList<Event> list2 = new ArrayList<>();
-
-        for (int i = 0; i < listOfEvents.size() /2; i++) {
-            list1.add(listOfEvents.get(i*2));
-            list2.add(listOfEvents.get(i*2 + 1));
+        for (Event e : listOfEvents) {
+            list1.add(e);
+            list2.add(e);
         }
         channelHashmap = new LinkedHashMap<>();
-        channelHashmap.put("Channel1", list1);
-        channelHashmap.put("Channel2", list2);
+        channelHashmap.put("Channel 1", list1);
+        channelHashmap.put("Channel 2", list2);
 
         channels = new ArrayList<>(channelHashmap.keySet());
 
@@ -96,9 +94,6 @@ public class ChannelDrawerFragment extends Fragment {
         return layout;
     }
 
-
-
-
     public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
         mDrawerLayout = drawerLayout;
         //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -115,7 +110,6 @@ public class ChannelDrawerFragment extends Fragment {
                 super.onDrawerClosed(drawerView);
                 //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 getActivity().invalidateOptionsMenu();
-
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -126,6 +120,4 @@ public class ChannelDrawerFragment extends Fragment {
             }
         });
     }
-
-
 }

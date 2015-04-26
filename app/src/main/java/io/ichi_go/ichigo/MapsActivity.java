@@ -67,12 +67,12 @@ public class MapsActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps2);
-
         eventManager = EventManager.getInstance();
         //Make this check for current location instead of static value
         eventManager.loadEvents(LOCATION_NMT.latitude, LOCATION_NMT.longitude);
         listOfEvents = eventManager.getEvents();
+
+        setContentView(R.layout.activity_maps2);
 
         markerHashmap = new HashMap<>();
         setUpMapIfNeeded();
