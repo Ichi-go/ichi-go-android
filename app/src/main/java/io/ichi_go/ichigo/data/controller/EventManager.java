@@ -38,7 +38,7 @@ public class EventManager {
     private static volatile EventManager instance;
     private ArrayList<Event> events;
     private ArrayList<Event> myEvents;
-    private String url = "http://10.0.2.2:8000/getEvents";
+    private String url = "http://10.0.2.2:8000/";
 
     private EventManager() {
         this.events = new ArrayList<>();
@@ -70,7 +70,7 @@ public class EventManager {
         setThreadPolicy(policy);
 
         DefaultHttpClient client = new DefaultHttpClient();
-        HttpPost request = new HttpPost(url);
+        HttpPost request = new HttpPost(url + "getEvents");
         StringBuilder builder = new StringBuilder();
 
         ArrayList<NameValuePair> postParameters;
@@ -125,7 +125,7 @@ public class EventManager {
         setThreadPolicy(policy);
 
 
-        HttpPost request = new HttpPost(url);
+        HttpPost request = new HttpPost(url + "addEvent");
         DefaultHttpClient client = new DefaultHttpClient();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -165,7 +165,7 @@ public class EventManager {
         setThreadPolicy(policy);
 
         DefaultHttpClient client = new DefaultHttpClient();
-        HttpPost request = new HttpPost(url);
+        HttpPost request = new HttpPost(url + "deleteEvent");
 
         ArrayList<NameValuePair> postParameters;
         postParameters = new ArrayList<>();
