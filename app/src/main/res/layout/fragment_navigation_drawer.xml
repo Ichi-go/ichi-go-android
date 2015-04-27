@@ -10,7 +10,6 @@
         layout="@layout/app_bar_space" />
 
 
-
     <ImageView
         android:clickable="true"
         android:id="@+id/image_placeholder"
@@ -21,13 +20,30 @@
         android:src="@drawable/ratio16x9"
         android:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/imgTyler"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/app_bar_space"
+        android:src="@drawable/tyler2"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgTyler"
+        android:padding="16dp"
+        android:textSize="25sp"
+        android:text="Tyler Cecil" />
+
     <FrameLayout
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/image_placeholder"
-        android:background="#EEE"
-        >
+        android:background="#EEE">
 
         <android.support.v7.widget.RecyclerView
             android:layout_below="@id/image_placeholder"

@@ -133,7 +133,10 @@ public class NewEventActivity extends ActionBarActivity {
                             EventManager eventManager = EventManager.getInstance();
                             eventManager.addEvent(newEvent);
 
-                            NavUtils.navigateUpFromSameTask(NewEventActivity.this);
+                            Intent i = NavUtils.getParentActivityIntent(NewEventActivity.this);
+                            i.putExtra("latitude", Double.valueOf(newEvent.getLatitude()));
+                            i.putExtra("longitude", Double.valueOf(newEvent.getLongitude()));
+                            NavUtils.navigateUpTo(NewEventActivity.this, i);
                         }
                     });
                 }

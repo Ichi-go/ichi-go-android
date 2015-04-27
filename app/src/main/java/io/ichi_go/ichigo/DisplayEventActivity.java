@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
 
@@ -36,6 +38,10 @@ public class DisplayEventActivity extends ActionBarActivity {
 
         displayName.setText(currentEvent.getName());
         displayDescription.setText(currentEvent.getDescription());
+
+        //if (currentEvent.getId() != ""){
+            ((Button) findViewById(R.id.delete_event_button)).setVisibility(View.VISIBLE);
+        //}
 
     }
 
@@ -74,6 +80,8 @@ public class DisplayEventActivity extends ActionBarActivity {
 
     public void deleteEvent(View v) {
         if (v == findViewById(R.id.delete_event_button)) {
+            EventManager eventManager = EventManager.getInstance();
+            //eventManager.deleteEvent(currentEvent);
             Log.d(TAG, "Participant wants to delete the event");
 
         }
