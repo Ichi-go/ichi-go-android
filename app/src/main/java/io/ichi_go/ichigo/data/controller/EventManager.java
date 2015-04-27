@@ -37,9 +37,12 @@ import static android.os.StrictMode.setThreadPolicy;
 public class EventManager {
     private static volatile EventManager instance;
     private ArrayList<Event> events;
+    private ArrayList<Event> myEvents;
+    private String url = "http://10.0.2.2:8000/";
 
     private EventManager() {
         this.events = new ArrayList<>();
+        this.myEvents = new ArrayList<>();
     }
 
     /**
@@ -66,9 +69,8 @@ public class EventManager {
                 StrictMode.ThreadPolicy.Builder().permitAll().build();
         setThreadPolicy(policy);
 
-        String url = "http://10.0.2.2:8000/getEvents";
         DefaultHttpClient client = new DefaultHttpClient();
-        HttpPost request = new HttpPost(url);
+        HttpPost request = new HttpPost(url + "getEvents");
         StringBuilder builder = new StringBuilder();
 
         ArrayList<NameValuePair> postParameters;
@@ -104,6 +106,14 @@ public class EventManager {
     }
 
     /**
+     * Retrieve all my events currently loaded.
+     * @return the events
+     */
+    public ArrayList<Event> getMyEvents() {
+        return myEvents;
+    }
+
+    /**
      * Add a new event to the list of local events
      * @param event the event to add
      */
@@ -115,7 +125,7 @@ public class EventManager {
         setThreadPolicy(policy);
 
 
-        HttpPost request = new HttpPost("http://10.0.2.2:8000/addEvent");
+        HttpPost request = new HttpPost(url + "addEvent");
         DefaultHttpClient client = new DefaultHttpClient();
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -129,7 +139,9 @@ public class EventManager {
             /*Create and send event*/
             request.setHeader("Content-Type", "application/json");
             request.setEntity(new ByteArrayEntity(out.toByteArray()));
-            client.execute(request);
+            HttpResponse response = client.execute(request);
+
+            event.setId(response.getEntity().toString());
         } catch (UnsupportedEncodingException e) {
             Log.d("NewEvent", "Failed to create new event.");
             e.printStackTrace();
@@ -140,10 +152,35 @@ public class EventManager {
 
         Log.d("NewEvent", "Successfully created new event.");
         events.add(event);
+        myEvents.add(event);
     }
 
     public void editEvent(Event event) {
         throw new UnsupportedOperationException();
+    }
+
+    public void deleteEvent(Event event) {
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        setThreadPolicy(policy);
+
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpPost request = new HttpPost(url + "deleteEvent");
+
+        ArrayList<NameValuePair> postParameters;
+        postParameters = new ArrayList<>();
+        postParameters.add(new BasicNameValuePair("id", event.getId()));
+
+        try {
+            request.setEntity(new UrlEncodedFormEntity(postParameters));
+            client.execute(request);
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        myEvents.remove(event);
     }
 
     /**
@@ -156,7 +193,7 @@ public class EventManager {
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject j = array.getJSONObject(i);
-                Event e = new Event("0",
+                Event e = new Event("",
                                     j.getString("name"),
                                     j.getString("description"),
                                     j.getString("latitude"),

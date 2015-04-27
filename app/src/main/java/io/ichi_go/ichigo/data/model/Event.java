@@ -30,8 +30,7 @@ public class Event implements Comparable<Event>, Parcelable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.location = location;
-        //this.latLng = new LatLng(Double.)
-        //  this.location = location;
+        this.id = id;
     }
 
     public String printData() {
