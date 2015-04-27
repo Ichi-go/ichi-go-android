@@ -116,7 +116,10 @@ public class NavigationDrawerFragment extends Fragment {
                     YoYo.with(Techniques.Tada)
                             .duration(700)
                             .playOn(getActivity().findViewById(R.id.drawer_list));
-                    //.playOn(layout.findViewById(R.id.drawer_list));
+                } else {
+                    YoYo.with(Techniques.Tada)
+                            .duration(700)
+                            .playOn(getActivity().findViewById(R.id.drawer_list));
                 }
             }
 
@@ -130,7 +133,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "Nav Item 2", "Nav Item 3", "Nav Item 4"};
+        String[] titles = {"Create Event", "My Events", "Friends", "Profile", "General", "Help & Feedback", "Settings"};
         for (String s : titles) {
             data.add(new NavItem(s, R.drawable.ic_launcher_strawberry));
         }
@@ -141,18 +144,17 @@ public class NavigationDrawerFragment extends Fragment {
     public void setUp(int fragmentID, DrawerLayout drawerLayout, Toolbar toolbar) {
         containerView = getActivity().findViewById(fragmentID);
         mDrawerLayout = drawerLayout;
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 getActivity().invalidateOptionsMenu();
             }
         };

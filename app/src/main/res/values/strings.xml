@@ -17,5 +17,7 @@
 
     <string name="strDelete">Delete</string>
     <string name="strEdit">Edit</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_my_location">Go to my location</string>
 
 </resources>
