@@ -179,6 +179,8 @@ public class EventManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        myEvents.remove(event);
     }
 
     /**
