@@ -37,9 +37,11 @@ import static android.os.StrictMode.setThreadPolicy;
 public class EventManager {
     private static volatile EventManager instance;
     private ArrayList<Event> events;
+    private ArrayList<Event> myEvents;
 
     private EventManager() {
         this.events = new ArrayList<>();
+        this.myEvents = new ArrayList<>();
     }
 
     /**
@@ -129,7 +131,9 @@ public class EventManager {
             /*Create and send event*/
             request.setHeader("Content-Type", "application/json");
             request.setEntity(new ByteArrayEntity(out.toByteArray()));
-            client.execute(request);
+            HttpResponse response = client.execute(request);
+
+            event.setId(response.getEntity().toString());
         } catch (UnsupportedEncodingException e) {
             Log.d("NewEvent", "Failed to create new event.");
             e.printStackTrace();
@@ -140,6 +144,7 @@ public class EventManager {
 
         Log.d("NewEvent", "Successfully created new event.");
         events.add(event);
+        myEvents.add(event);
     }
 
     public void editEvent(Event event) {
