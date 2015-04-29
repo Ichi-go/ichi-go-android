@@ -39,9 +39,10 @@ public class DisplayEventActivity extends ActionBarActivity {
         displayName.setText(currentEvent.getName());
         displayDescription.setText(currentEvent.getDescription());
 
-        //if (currentEvent.getId() != ""){
-            ((Button) findViewById(R.id.delete_event_button)).setVisibility(View.VISIBLE);
-        //}
+        if (currentEvent.getOwner().equals(EventManager.getInstance().getUsername())){
+            (findViewById(R.id.delete_event_button)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.edit_event_button)).setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -81,7 +82,7 @@ public class DisplayEventActivity extends ActionBarActivity {
     public void deleteEvent(View v) {
         if (v == findViewById(R.id.delete_event_button)) {
             EventManager eventManager = EventManager.getInstance();
-            //eventManager.deleteEvent(currentEvent);
+            eventManager.deleteEvent(currentEvent);
             Log.d(TAG, "Participant wants to delete the event");
 
         }
