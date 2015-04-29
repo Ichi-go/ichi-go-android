@@ -38,6 +38,7 @@ public class EventManager {
     private static volatile EventManager instance;
     private ArrayList<Event> events;
     private ArrayList<Event> myEvents;
+    private String username = "";
     private String url = "http://10.0.2.2:8000/";
 
     private EventManager() {
@@ -206,5 +207,13 @@ public class EventManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

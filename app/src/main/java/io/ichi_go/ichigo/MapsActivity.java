@@ -90,7 +90,7 @@ public class MapsActivity extends ActionBarActivity implements
             if (mMap != null) {
                 mMap.moveCamera(update);
             } else {
-                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -166,12 +166,12 @@ public class MapsActivity extends ActionBarActivity implements
                 break;
 
             case R.id.action_sign_in:
-                if (eventManager.getUsername == ""){
+                if (eventManager.getUsername().equals("")){
                     displaySignInDialog(item);
 
                 } else {
-                    Toast.makeText(this, "Logging out", Toast.LENGTH_LONG);
-                    eventManager.setUsername = "";
+                    Toast.makeText(this, "Logging out", Toast.LENGTH_LONG).show();
+                    eventManager.setUsername("");
                     item.setTitle("Sign In");
                 }
                 break;
@@ -195,6 +195,7 @@ public class MapsActivity extends ActionBarActivity implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 eventManager.setUsername(txtInput.getText().toString());
+                Toast.makeText(MapsActivity.this,"Logged in as: " + eventManager.getUsername(),Toast.LENGTH_SHORT).show();
                 item.setTitle("Log out");
             }
         });
