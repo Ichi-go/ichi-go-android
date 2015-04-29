@@ -17,6 +17,7 @@ public class Event implements Comparable<Event>, Parcelable {
     private String latitude;
     private String longitude;
     private String location = "none";
+    private String owner = "";
 
     private LatLng latLng;
     private String id = "";
@@ -24,19 +25,28 @@ public class Event implements Comparable<Event>, Parcelable {
 
     //private String location;
 
-    public Event(String id, String name, String description, String latitude, String longitude, String location) {
+    public Event(String id, String name, String description, String latitude, String longitude, String location, String owner) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
         this.location = location;
-        this.id = id;
+        this.owner = owner;
     }
 
     public String printData() {
         StringBuilder result = new StringBuilder();
         result.append(this.name);
         return result.toString();
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getName() {
@@ -122,22 +132,6 @@ public class Event implements Comparable<Event>, Parcelable {
         return result;
     }
 
-
-    public String writeJSON() {
-        JSONObject jso = new JSONObject();
-        try {
-
-            jso.put("longitude", this.getLongitude());
-            jso.put("latitude", this.getLatitude());
-            jso.put("name", this.getName());
-            jso.put("description", this.getDescription());
-            jso.put("location", this.getLocation());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jso.toString();
-    }
-
     public JSONObject getJSON() {
         JSONObject jso = new JSONObject();
         try {
@@ -147,6 +141,7 @@ public class Event implements Comparable<Event>, Parcelable {
             jso.put("name", this.getName());
             jso.put("description", this.getDescription());
             jso.put("location", this.getLocation());
+            jso.put("owner", this.getOwner());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -166,6 +161,7 @@ public class Event implements Comparable<Event>, Parcelable {
         dest.writeString(latitude);
         dest.writeString(longitude);
         dest.writeString(location);
+        dest.writeString(owner);
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
@@ -186,6 +182,7 @@ public class Event implements Comparable<Event>, Parcelable {
         latitude = in.readString();
         longitude = in.readString();
         location = in.readString();
+        owner = in.readString();
     }
 
 }

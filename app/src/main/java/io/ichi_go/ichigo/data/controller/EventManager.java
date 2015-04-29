@@ -199,7 +199,8 @@ public class EventManager {
                                     j.getString("description"),
                                     j.getString("latitude"),
                                     j.getString("longitude"),
-                                    j.getString("location"));
+                                    j.getString("location"),
+                                    j.getString("owner"));
                 this.events.add(e);
             }
         } catch (JSONException e1) {

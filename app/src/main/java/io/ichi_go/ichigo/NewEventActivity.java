@@ -52,7 +52,7 @@ public class NewEventActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        newEvent = new Event("", "", "", "", "", "");
+        newEvent = new Event("", "", "", "", "", "", "");
 
         Intent i = getIntent();
         if (i != null) {
@@ -131,6 +131,7 @@ public class NewEventActivity extends ActionBarActivity {
                             }
 
                             EventManager eventManager = EventManager.getInstance();
+                            newEvent.setOwner(eventManager.getUsername());
                             eventManager.addEvent(newEvent);
 
                             Intent i = NavUtils.getParentActivityIntent(NewEventActivity.this);

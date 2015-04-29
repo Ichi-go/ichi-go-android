@@ -128,6 +128,14 @@ public class MapsActivity extends ActionBarActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_maps, menu);
+        if (eventManager == null){
+            eventManager = EventManager.getInstance();
+        }
+        if (eventManager.getUsername().equals("")){
+            menu.findItem(R.id.action_sign_in).setTitle("Sign In");
+        } else {
+            menu.findItem(R.id.action_sign_in).setTitle("Log out");
+        }
         return true;
     }
 
@@ -194,9 +202,14 @@ public class MapsActivity extends ActionBarActivity implements
         dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                eventManager.setUsername(txtInput.getText().toString());
-                Toast.makeText(MapsActivity.this,"Logged in as: " + eventManager.getUsername(),Toast.LENGTH_SHORT).show();
-                item.setTitle("Log out");
+                String strUser = txtInput.getText().toString();
+                if(strUser.equals("")){
+                    Toast.makeText(MapsActivity.this,"No name given",Toast.LENGTH_SHORT).show();
+                } else {
+                    eventManager.setUsername(strUser);
+                    Toast.makeText(MapsActivity.this,"Logged in as: " + strUser,Toast.LENGTH_SHORT).show();
+                    item.setTitle("Log out");
+                }
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -287,13 +300,14 @@ public class MapsActivity extends ActionBarActivity implements
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                UiSettings mapSettings;
+                mapSettings = mMap.getUiSettings();
+                mapSettings.setZoomControlsEnabled(true);
+                mapSettings.setMyLocationButtonEnabled(true);
             }
         }
 
-        UiSettings mapSettings;
-        mapSettings = mMap.getUiSettings();
-        mapSettings.setZoomControlsEnabled(true);
-        mapSettings.setMyLocationButtonEnabled(true);
+
     }
 
     /**
