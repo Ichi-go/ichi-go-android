@@ -1,16 +1,20 @@
 package io.ichi_go.ichigo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -161,11 +165,48 @@ public class MapsActivity extends ActionBarActivity implements
                 goToMyLocation();
                 break;
 
+            case R.id.action_sign_in:
+                if (eventManager.getUsername == ""){
+                    displaySignInDialog(item);
+
+                } else {
+                    Toast.makeText(this, "Logging out", Toast.LENGTH_LONG);
+                    eventManager.setUsername = "";
+                    item.setTitle("Sign In");
+                }
+                break;
+
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
 
+    }
+
+    private void displaySignInDialog(final MenuItem item) {
+        AlertDialog.Builder dialogBuilder;
+        dialogBuilder = new AlertDialog.Builder(this);
+        final EditText txtInput = new EditText(this);
+
+        dialogBuilder.setTitle("Sign In");
+        dialogBuilder.setMessage("Enter your username");
+        dialogBuilder.setView(txtInput);
+        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                eventManager.setUsername(txtInput.getText().toString());
+                item.setTitle("Log out");
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MapsActivity.this,"Cancelled",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
 
