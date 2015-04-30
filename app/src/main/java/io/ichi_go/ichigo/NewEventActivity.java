@@ -37,7 +37,9 @@ import static io.ichi_go.ichigo.R.id.event_description;
 import static io.ichi_go.ichigo.R.id.event_location;
 import static io.ichi_go.ichigo.R.id.event_name;
 
-
+/**
+ * Activity that creates new events
+ */
 public class NewEventActivity extends ActionBarActivity {
 
     private Event newEvent;

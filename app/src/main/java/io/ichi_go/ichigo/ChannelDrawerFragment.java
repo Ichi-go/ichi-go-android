@@ -32,7 +32,7 @@ import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
 /**
- * Created by ichigo on 4/25/15.
+ * The drawer fragment that displays channels
  */
 public class ChannelDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;

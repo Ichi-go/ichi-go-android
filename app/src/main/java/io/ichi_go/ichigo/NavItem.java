@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 
 /**
- * Created by Russell on 2/22/2015.
+ * The items that are displayed in the navigation drawer
  */
 public class NavItem {
     private String title;

@@ -24,7 +24,7 @@ import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Navigation drawer fragment that manages the navigation drawer
  */
 public class NavigationDrawerFragment extends Fragment {
 

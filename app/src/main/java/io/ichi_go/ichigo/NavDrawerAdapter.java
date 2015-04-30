@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Russell on 2/22/2015.
+ * Adapter to manage the navigation drawer's contents
  */
 public class NavDrawerAdapter extends RecyclerView.Adapter<NavDrawerAdapter.MyViewHolder> {
     private LayoutInflater inflater;

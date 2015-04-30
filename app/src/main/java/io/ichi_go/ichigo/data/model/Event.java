@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by russell on 2/22/15.
+ * Event class that stores all information regarding an event
  */
 public class Event implements Comparable<Event>, Parcelable {
     private String name = "";
@@ -21,9 +21,6 @@ public class Event implements Comparable<Event>, Parcelable {
 
     private LatLng latLng;
     private String id = "";
-
-
-    //private String location;
 
     /**
      * Constructor for an event
@@ -103,7 +100,7 @@ public class Event implements Comparable<Event>, Parcelable {
 
     /**
      * Sets the LatLng of the event
-     * @param LatLng the new LatLng
+     * @param latLng the new LatLng
      */
     public void setLatLng(LatLng latLng) {
         this.latLng = latLng;

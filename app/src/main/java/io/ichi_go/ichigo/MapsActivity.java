@@ -41,6 +41,9 @@ import java.util.HashMap;
 import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
+/**
+ * Main activity that is the center of the program
+ */
 public class MapsActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,

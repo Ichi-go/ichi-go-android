@@ -13,7 +13,7 @@ import java.util.List;
 import io.ichi_go.ichigo.data.model.Event;
 
 /**
- * Created by ichigo on 4/25/15.
+ * Adapter used to set up the expandable list in the channel drawer
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter{
 
@@ -119,15 +119,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter{
         return convertView;
     }
 
-    /**
-     *
-     * @param groupPosition
-     * @param childPosition
-     * @param isLastChild
-     * @param convertView
-     * @param parent
-     * @return
-     */
     /**
      * Gets a view for an event and inflates it
      * @param groupPosition the channel position for the view

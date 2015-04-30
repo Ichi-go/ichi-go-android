@@ -15,7 +15,9 @@ import android.widget.TextView;
 import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
-
+/**
+ * Activity to display event information
+ */
 public class DisplayEventActivity extends ActionBarActivity {
     private Event currentEvent;
     private static final String TAG = "ViewEventActivity";
