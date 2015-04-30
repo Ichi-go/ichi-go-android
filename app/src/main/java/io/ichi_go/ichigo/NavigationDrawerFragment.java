@@ -24,7 +24,7 @@ import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Navigation drawer fragment that manages the navigation drawer
  */
 public class NavigationDrawerFragment extends Fragment {
 
@@ -34,15 +34,29 @@ public class NavigationDrawerFragment extends Fragment {
     private NavDrawerAdapter adapter;
     private View containerView;
 
+    /**
+     * The required empty public constructor
+     */
     public NavigationDrawerFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * This method creates the activity every time
+     * @param savedInstanceState Used if instance state was saved
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the navigation drawer
+     * @param inflater The inflater of the view
+     * @param container the container of the view
+     * @param savedInstanceState Used if instance state was saved
+     * @return the view that is being created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,6 +69,7 @@ public class NavigationDrawerFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                //First option in the navigation drawer was selected
                 if (position == 0) {
                     YoYo.with(Techniques.Tada)
                             .duration(700)
@@ -83,6 +98,7 @@ public class NavigationDrawerFragment extends Fragment {
                     }).start();
                 }
 
+                //Second item in the navigation drawer was selected
                 if (position == 1) {
                     YoYo.with(Techniques.Tada)
                             .duration(700)
@@ -106,6 +122,7 @@ public class NavigationDrawerFragment extends Fragment {
                     }).start();
                 }
 
+                //Third item in the navigation drawer was selected
                 if (position == 2) {
                     YoYo.with(Techniques.Tada)
                             .duration(700)
@@ -116,7 +133,10 @@ public class NavigationDrawerFragment extends Fragment {
                     YoYo.with(Techniques.Tada)
                             .duration(700)
                             .playOn(getActivity().findViewById(R.id.drawer_list));
-                    //.playOn(layout.findViewById(R.id.drawer_list));
+                } else {
+                    YoYo.with(Techniques.Tada)
+                            .duration(700)
+                            .playOn(getActivity().findViewById(R.id.drawer_list));
                 }
             }
 
@@ -128,31 +148,39 @@ public class NavigationDrawerFragment extends Fragment {
         return layout;
     }
 
+    /**
+     * Gets the list of NavItems that are used to populate each row of the navigation drawer
+     * @return the list of NavItems
+     */
     public static List<NavItem> getData() {
         List<NavItem> data = new ArrayList<>();
-        String[] titles = {"New Event", "Nav Item 2", "Nav Item 3", "Nav Item 4"};
+        String[] titles = {"Create Event", "My Events", "Friends", "Profile", "General", "Help & Feedback", "Settings"};
         for (String s : titles) {
             data.add(new NavItem(s, R.drawable.ic_launcher_strawberry));
         }
         return data;
     }
 
-
+    /**
+     * Sets up the navigation drawer
+     * @param fragmentID the id of the fragment used to house the navigation drawer
+     * @param drawerLayout the drawer layout to be set up
+     * @param toolbar the toolbar that is modified when the drawer is opened/closed (toggled)
+     */
     public void setUp(int fragmentID, DrawerLayout drawerLayout, Toolbar toolbar) {
         containerView = getActivity().findViewById(fragmentID);
         mDrawerLayout = drawerLayout;
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 getActivity().invalidateOptionsMenu();
             }
         };
@@ -165,6 +193,9 @@ public class NavigationDrawerFragment extends Fragment {
         });
     }
 
+    /**
+     * Sets up a GestureDetector on the navigation drawer
+     */
     static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
@@ -202,6 +233,9 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+    /**
+     * Interface for a clicker listener
+     */
     public interface ClickListener {
         void onClick(View view, int position);
 

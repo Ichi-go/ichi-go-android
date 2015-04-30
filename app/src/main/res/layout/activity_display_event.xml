@@ -68,7 +68,8 @@
             android:layout_toLeftOf="@+id/space"
             android:layout_toStartOf="@+id/space"
             android:text="@string/strEdit"
-            android:onClick="editEvent"/>
+            android:onClick="editEvent"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/delete_event_button"
@@ -77,7 +78,8 @@
             android:layout_toRightOf="@+id/space"
             android:layout_toEndOf="@+id/space"
             android:text="@string/strDelete"
-            android:onClick="deleteEvent"/>
+            android:onClick="deleteEvent"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 

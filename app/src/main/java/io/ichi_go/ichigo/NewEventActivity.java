@@ -37,11 +37,17 @@ import static io.ichi_go.ichigo.R.id.event_description;
 import static io.ichi_go.ichigo.R.id.event_location;
 import static io.ichi_go.ichigo.R.id.event_name;
 
-
+/**
+ * Activity that creates new events
+ */
 public class NewEventActivity extends ActionBarActivity {
 
     private Event newEvent;
 
+    /**
+     * This method creates the activity every time
+     * @param savedInstanceState Used if instance state was saved
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +58,7 @@ public class NewEventActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        newEvent = new Event("", "", "", "", "", "");
+        newEvent = new Event("", "", "", "", "", "", "");
 
         Intent i = getIntent();
         if (i != null) {
@@ -61,6 +67,11 @@ public class NewEventActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * Inflates the options menu for the activity
+     * @param menu the menu being inflated with a layout
+     * @return true if successful
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -68,6 +79,11 @@ public class NewEventActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * Ran when an option in the inflated menu is selected
+     * @param item The MenuItem that was selected
+     * @return true if successful
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -87,6 +103,10 @@ public class NewEventActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Ran when the user clicks on the 'Create event' button. Tries to create the event
+     * @param v the view that called this function
+     */
     public void createEvent(View v) {
         if (v.getId() == R.id.create_event_button) {
 
@@ -131,9 +151,13 @@ public class NewEventActivity extends ActionBarActivity {
                             }
 
                             EventManager eventManager = EventManager.getInstance();
+                            newEvent.setOwner(eventManager.getUsername());
                             eventManager.addEvent(newEvent);
 
-                            NavUtils.navigateUpFromSameTask(NewEventActivity.this);
+                            Intent i = NavUtils.getParentActivityIntent(NewEventActivity.this);
+                            i.putExtra("latitude", Double.valueOf(newEvent.getLatitude()));
+                            i.putExtra("longitude", Double.valueOf(newEvent.getLongitude()));
+                            NavUtils.navigateUpTo(NewEventActivity.this, i);
                         }
                     });
                 }

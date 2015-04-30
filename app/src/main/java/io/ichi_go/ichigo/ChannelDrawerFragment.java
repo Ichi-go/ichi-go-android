@@ -12,12 +12,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -28,7 +32,7 @@ import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
 /**
- * Created by ichigo on 4/25/15.
+ * The drawer fragment that displays channels
  */
 public class ChannelDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
@@ -38,17 +42,31 @@ public class ChannelDrawerFragment extends Fragment {
     private ExpandableListView exp_list;
     private ExpandableListAdapter expandableListAdapter;
 
+    /**
+     * Required empty public constructor
+     */
     public ChannelDrawerFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * This method creates the activity every time
+     * @param savedInstanceState Used if instance state was saved
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the channel drawer
+     * @param inflater The inflater of the view
+     * @param container the container of the view
+     * @param savedInstanceState Used if instance state was saved
+     * @return the view that is being created
+     */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_channel_drawer, container, false);
 
@@ -56,15 +74,8 @@ public class ChannelDrawerFragment extends Fragment {
         ArrayList<Event> listOfEvents = eventManager.getEvents();
 
         //Until Channel manager exists only have 2 channels
-        ArrayList<Event> list1 = new ArrayList<>();
-        ArrayList<Event> list2 = new ArrayList<>();
-        for (Event e : listOfEvents) {
-            list1.add(e);
-            list2.add(e);
-        }
         channelHashmap = new LinkedHashMap<>();
-        channelHashmap.put("Channel 1", list1);
-        channelHashmap.put("Channel 2", list2);
+        channelHashmap.put("NMT Channel", listOfEvents);
 
         channels = new ArrayList<>(channelHashmap.keySet());
 
@@ -79,10 +90,10 @@ public class ChannelDrawerFragment extends Fragment {
                     @Override
                     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
                                                 int childPosition, long id) {
-                        Intent i = new Intent(parent.getContext(), DisplayEventActivity.class);
-                        i.putExtra("currentEvent", channelHashmap.get(channels.get(groupPosition)).get(childPosition));
-                        startActivity(i);
-
+                        mDrawerLayout.closeDrawer(Gravity.RIGHT);
+                        Event clickedEvent = channelHashmap.get(channels.get(groupPosition)).get(childPosition);
+                        MapsActivity mapsActivity = (MapsActivity) getActivity();
+                        mapsActivity.goToLocation(clickedEvent);
                         return false;
                     }
                 }
@@ -90,8 +101,14 @@ public class ChannelDrawerFragment extends Fragment {
         return layout;
     }
 
+    /**
+     * Sets up the drawer layout
+     * @param drawerLayout the drawer layout to be set up
+     * @param toolbar the toolbar that is modified when the drawer is opened/closed (toggled)
+     */
     public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
         mDrawerLayout = drawerLayout;
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -103,6 +120,7 @@ public class ChannelDrawerFragment extends Fragment {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 getActivity().invalidateOptionsMenu();
+
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);

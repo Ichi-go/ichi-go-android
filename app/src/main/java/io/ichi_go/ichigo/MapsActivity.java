@@ -1,20 +1,26 @@
 package io.ichi_go.ichigo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -31,11 +37,13 @@ import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import io.ichi_go.ichigo.data.controller.EventManager;
 import io.ichi_go.ichigo.data.model.Event;
 
+/**
+ * Main activity that is the center of the program
+ */
 public class MapsActivity extends ActionBarActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -46,13 +54,16 @@ public class MapsActivity extends ActionBarActivity implements
     public static final String TAG = MapsActivity.class.getSimpleName();
     private final LatLng LOCATION_SOCORRO = new LatLng(34.0617, -106.8994);
     private final LatLng LOCATION_NMT = new LatLng(34.0668, -106.9056);
-    private final Integer MARKER_NAME_LENGTH = 15;
+    private final LatLng DEFAULT_LOCATION = LOCATION_NMT;
+    private final float DEFAULT_ZOOM = 17;
+    private final Integer MARKER_NAME_LENGTH = 16;
 
     //Map Variables
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private HashMap<String, Event> markerHashmap;
+    private HashMap<String, Event> markerToEventHashmap = new HashMap<>();
+    private HashMap<Event, Marker> eventToMarkerHashmap = new HashMap<>();
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     //Layout Variables
@@ -64,6 +75,10 @@ public class MapsActivity extends ActionBarActivity implements
     private ArrayList<Event> listOfEvents = new ArrayList<>();
     private EventManager eventManager;
 
+    /**
+     * This method creates the activity every time
+     * @param savedInstanceState Used if instance state was saved
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +88,18 @@ public class MapsActivity extends ActionBarActivity implements
         listOfEvents = eventManager.getEvents();
 
         setContentView(R.layout.activity_maps2);
-
-        markerHashmap = new HashMap<>();
         setUpMapIfNeeded();
+
+        Double lat = getIntent().getDoubleExtra("latitude", 0);
+        if (lat != 0) {
+            Double lng = getIntent().getDoubleExtra("longitude", 0);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), DEFAULT_ZOOM);
+            if (mMap != null) {
+                mMap.moveCamera(update);
+            } else {
+                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -88,10 +112,13 @@ public class MapsActivity extends ActionBarActivity implements
         // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setInterval(60 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
     }
 
+    /**
+     * Runs when the activity is started
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -107,32 +134,122 @@ public class MapsActivity extends ActionBarActivity implements
         channelDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
     }
 
+    /**
+     * Inflates the options menu for the activity
+     * @param menu the menu being inflated with a layout
+     * @return true if successful
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_maps, menu);
+        if (eventManager == null){
+            eventManager = EventManager.getInstance();
+        }
+        if (eventManager.getUsername().equals("")){
+            menu.findItem(R.id.action_sign_in).setTitle("Sign In");
+        } else {
+            menu.findItem(R.id.action_sign_in).setTitle("Log out");
+        }
         return true;
     }
 
+    /**
+     * Ran when an option in the inflated menu is selected
+     * @param item The MenuItem that was selected
+     * @return true if successful
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id) {
+            //noinspection SimplifiableIfStatement
+            case R.id.action_settings:
+                return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if (id == R.id.action_channel_drawer) {
-            ((DrawerLayout) findViewById(R.id.drawer_layout)).openDrawer(Gravity.RIGHT);
-        }
+            case R.id.action_channel_drawer:
+                ((DrawerLayout) findViewById(R.id.drawer_layout)).openDrawer(Gravity.RIGHT);
+                break;
 
+            case R.id.action_refresh:
+                if (eventManager == null) {
+                    eventManager = EventManager.getInstance();
+                }
+                Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+                if (location == null) {
+                    eventManager.loadEvents(DEFAULT_LOCATION.latitude, DEFAULT_LOCATION.longitude);
+                } else {
+                    eventManager.loadEvents(location.getLatitude(), location.getLongitude());
+                }
+                listOfEvents = eventManager.getEvents();
+                setUpMapIfNeeded();
+                break;
+
+            case R.id.action_my_location:
+                goToMyLocation();
+                break;
+
+            case R.id.action_sign_in:
+                if (eventManager.getUsername().equals("")){
+                    displaySignInDialog(item);
+
+                } else {
+                    Toast.makeText(this, "Logging out", Toast.LENGTH_LONG).show();
+                    eventManager.setUsername("");
+                    item.setTitle("Sign In");
+                }
+                break;
+
+            default:
+                break;
+        }
         return super.onOptionsItemSelected(item);
+
     }
 
+    /**
+     * Displays a sign in dialog box when 'Sign In' is clicked in the menu
+     * @param item a reference to the 'Sign In' item
+     */
+    private void displaySignInDialog(final MenuItem item) {
+        AlertDialog.Builder dialogBuilder;
+        dialogBuilder = new AlertDialog.Builder(this);
+        final EditText txtInput = new EditText(this);
 
+        dialogBuilder.setTitle("Sign In");
+        dialogBuilder.setMessage("Enter your username");
+        dialogBuilder.setView(txtInput);
+        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strUser = txtInput.getText().toString();
+                if(strUser.equals("")){
+                    Toast.makeText(MapsActivity.this,"No name given",Toast.LENGTH_SHORT).show();
+                } else {
+                    eventManager.setUsername(strUser);
+                    Toast.makeText(MapsActivity.this,"Logged in as: " + strUser,Toast.LENGTH_SHORT).show();
+                    item.setTitle("Log out");
+                }
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MapsActivity.this,"Cancelled",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Ran when the activity resumes
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -140,6 +257,9 @@ public class MapsActivity extends ActionBarActivity implements
         mGoogleApiClient.connect();
     }
 
+    /**
+     * Ran when the activity pauses
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -195,7 +315,7 @@ public class MapsActivity extends ActionBarActivity implements
                 mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                     @Override
                     public void onInfoWindowClick(Marker marker) {
-                        Event currentEvent = markerHashmap.get(marker.getId());
+                        Event currentEvent = markerToEventHashmap.get(marker.getId());
                         if (currentEvent != null) {
                             Intent i = new Intent(MapsActivity.this, DisplayEventActivity.class);
                             i.putExtra("currentEvent", currentEvent);
@@ -209,18 +329,18 @@ public class MapsActivity extends ActionBarActivity implements
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                UiSettings mapSettings;
+                mapSettings = mMap.getUiSettings();
+                mapSettings.setZoomControlsEnabled(true);
+                mapSettings.setMyLocationButtonEnabled(true);
             }
         }
 
-        UiSettings mapSettings;
-        mapSettings = mMap.getUiSettings();
-        mapSettings.setZoomControlsEnabled(true);
-        mapSettings.setMyLocationButtonEnabled(true);
+
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
@@ -235,18 +355,25 @@ public class MapsActivity extends ActionBarActivity implements
             lat = Double.valueOf(e.getLatitude());
             lng = Double.valueOf(e.getLongitude());
             name = e.getName();
-            System.out.println("Name of Loaded Event: " + name);
             if (name.length() > MARKER_NAME_LENGTH) {
                 name = name.substring(0, MARKER_NAME_LENGTH);
             }
-            System.out.println("Name after trim: " + name);
 
             MarkerOptions markerOptions = new MarkerOptions().position(new LatLng(lat, lng)).title(name);
             Marker marker = mMap.addMarker(markerOptions);
-            markerHashmap.put(marker.getId(), e);
+            markerToEventHashmap.put(marker.getId(), e);
+            eventToMarkerHashmap.put(e, marker);
         }
+
+        //Go to default location
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, DEFAULT_ZOOM);
+        mMap.moveCamera(update);
     }
 
+    /**
+     * Ran when the Google Maps API is connected
+     * @param bundle This means something?
+     */
     @Override
     public void onConnected(Bundle bundle) {
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -254,6 +381,7 @@ public class MapsActivity extends ActionBarActivity implements
         if (location == null) {
             startLocationUpdates();
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
         } else {
             handleNewLocation(location);
         }
@@ -261,16 +389,27 @@ public class MapsActivity extends ActionBarActivity implements
         Log.i(TAG, "Location services connected.");
     }
 
+    /**
+     * Ran when we have location services to start keeping track of location
+     */
     protected void startLocationUpdates() {
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
     }
 
+    /**
+     * Ran when the connection to the map is suspended
+     * @param i This means something?
+     */
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "Location services suspended. Please reconnect.");
     }
 
+    /**
+     * Ran when the connection to the map fails.
+     * @param connectionResult The reason that the connection failed
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (connectionResult.hasResolution()) {
@@ -285,6 +424,10 @@ public class MapsActivity extends ActionBarActivity implements
         }
     }
 
+    /**
+     * Moves the map to a given location
+     * @param location the location to move the map to
+     */
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
         Double lat = location.getLatitude();
@@ -294,18 +437,57 @@ public class MapsActivity extends ActionBarActivity implements
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
+    /**
+     * Moves the map to a specific event and displays the marker for that event
+     * @param event the event to move to
+     */
+    public void goToLocation(Event event) {
+        LatLng latLng = new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude()));
+        CameraUpdate update = CameraUpdateFactory.newLatLng(latLng);
+        mMap.animateCamera(update);
+        eventToMarkerHashmap.get(event).showInfoWindow();
+    }
 
+    /**
+     * Moves the map to current location when 'Go to my location' is clicked in the menu
+     */
+    public void goToMyLocation(){
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (location == null) {
+            Toast.makeText(this, "Location currently unavailable", Toast.LENGTH_SHORT).show();
+        } else {
+            CameraUpdate update = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+            mMap.animateCamera(update);
+        }
+    }
+
+    /**
+     * Handles when the Location manager notices a change in location
+     * @param location the new location of the device
+     */
     @Override
     public void onLocationChanged(Location location) {
+        if (eventManager == null) {
+            eventManager = EventManager.getInstance();
+        }
+        eventManager.loadEvents(location.getLatitude(), location.getLongitude());
         handleNewLocation(location);
     }
 
-
+    /**
+     * Handles when the map is clicked
+     * @param latLng The latitude and longitude of the map click
+     */
     @Override
     public void onMapClick(LatLng latLng) {
 
     }
 
+    /**
+     * Handles when the map is clicked and held
+     * @param latLng The latitude and longitude of the map click
+     */
     @Override
     public void onMapLongClick(LatLng latLng) {
         Intent i = new Intent(this, NewEventActivity.class);

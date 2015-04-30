@@ -13,7 +13,7 @@
     <style name="MyCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColorPrimary">@color/colorHighlight</item>
         <item name="android:textColorSecondary">@color/colorHighlight</item>
-
+        <item name="android:itemTextAppearance">@color/colorPrimaryText</item>
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
