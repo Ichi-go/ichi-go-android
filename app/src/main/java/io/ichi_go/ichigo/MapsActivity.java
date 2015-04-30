@@ -72,6 +72,10 @@ public class MapsActivity extends ActionBarActivity implements
     private ArrayList<Event> listOfEvents = new ArrayList<>();
     private EventManager eventManager;
 
+    /**
+     * This method creates the activity every time
+     * @param savedInstanceState Used if instance state was saved
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +113,9 @@ public class MapsActivity extends ActionBarActivity implements
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
     }
 
+    /**
+     * Runs when the activity is started
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -124,6 +131,11 @@ public class MapsActivity extends ActionBarActivity implements
         channelDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
     }
 
+    /**
+     * Inflates the options menu for the activity
+     * @param menu the menu being inflated with a layout
+     * @return true if successful
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -139,6 +151,11 @@ public class MapsActivity extends ActionBarActivity implements
         return true;
     }
 
+    /**
+     * Ran when an option in the inflated menu is selected
+     * @param item The MenuItem that was selected
+     * @return true if successful
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -191,6 +208,10 @@ public class MapsActivity extends ActionBarActivity implements
 
     }
 
+    /**
+     * Displays a sign in dialog box when 'Sign In' is clicked in the menu
+     * @param item a reference to the 'Sign In' item
+     */
     private void displaySignInDialog(final MenuItem item) {
         AlertDialog.Builder dialogBuilder;
         dialogBuilder = new AlertDialog.Builder(this);
@@ -223,7 +244,9 @@ public class MapsActivity extends ActionBarActivity implements
         alertDialog.show();
     }
 
-
+    /**
+     * Ran when the activity resumes
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -231,6 +254,9 @@ public class MapsActivity extends ActionBarActivity implements
         mGoogleApiClient.connect();
     }
 
+    /**
+     * Ran when the activity pauses
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -311,8 +337,7 @@ public class MapsActivity extends ActionBarActivity implements
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
@@ -337,12 +362,15 @@ public class MapsActivity extends ActionBarActivity implements
             eventToMarkerHashmap.put(e, marker);
         }
 
-
         //Go to default location
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, DEFAULT_ZOOM);
         mMap.moveCamera(update);
     }
 
+    /**
+     * Ran when the Google Maps API is connected
+     * @param bundle This means something?
+     */
     @Override
     public void onConnected(Bundle bundle) {
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -358,16 +386,27 @@ public class MapsActivity extends ActionBarActivity implements
         Log.i(TAG, "Location services connected.");
     }
 
+    /**
+     * Ran when we have location services to start keeping track of location
+     */
     protected void startLocationUpdates() {
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
     }
 
+    /**
+     * Ran when the connection to the map is suspended
+     * @param i This means something?
+     */
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "Location services suspended. Please reconnect.");
     }
 
+    /**
+     * Ran when the connection to the map fails.
+     * @param connectionResult The reason that the connection failed
+     */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (connectionResult.hasResolution()) {
@@ -382,6 +421,10 @@ public class MapsActivity extends ActionBarActivity implements
         }
     }
 
+    /**
+     * Moves the map to a given location
+     * @param location the location to move the map to
+     */
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
         Double lat = location.getLatitude();
@@ -391,6 +434,10 @@ public class MapsActivity extends ActionBarActivity implements
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
+    /**
+     * Moves the map to a specific event and displays the marker for that event
+     * @param event the event to move to
+     */
     public void goToLocation(Event event) {
         LatLng latLng = new LatLng(Double.valueOf(event.getLatitude()), Double.valueOf(event.getLongitude()));
         CameraUpdate update = CameraUpdateFactory.newLatLng(latLng);
@@ -398,6 +445,9 @@ public class MapsActivity extends ActionBarActivity implements
         eventToMarkerHashmap.get(event).showInfoWindow();
     }
 
+    /**
+     * Moves the map to current location when 'Go to my location' is clicked in the menu
+     */
     public void goToMyLocation(){
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
@@ -409,6 +459,10 @@ public class MapsActivity extends ActionBarActivity implements
         }
     }
 
+    /**
+     * Handles when the Location manager notices a change in location
+     * @param location the new location of the device
+     */
     @Override
     public void onLocationChanged(Location location) {
         if (eventManager == null) {
@@ -418,11 +472,19 @@ public class MapsActivity extends ActionBarActivity implements
         handleNewLocation(location);
     }
 
+    /**
+     * Handles when the map is clicked
+     * @param latLng The latitude and longitude of the map click
+     */
     @Override
     public void onMapClick(LatLng latLng) {
 
     }
 
+    /**
+     * Handles when the map is clicked and held
+     * @param latLng The latitude and longitude of the map click
+     */
     @Override
     public void onMapLongClick(LatLng latLng) {
         Intent i = new Intent(this, NewEventActivity.class);

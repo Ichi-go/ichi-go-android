@@ -42,15 +42,29 @@ public class ChannelDrawerFragment extends Fragment {
     private ExpandableListView exp_list;
     private ExpandableListAdapter expandableListAdapter;
 
+    /**
+     * Required empty public constructor
+     */
     public ChannelDrawerFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * This method creates the activity every time
+     * @param savedInstanceState Used if instance state was saved
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the channel drawer
+     * @param inflater The inflater of the view
+     * @param container the container of the view
+     * @param savedInstanceState Used if instance state was saved
+     * @return the view that is being created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,6 +101,11 @@ public class ChannelDrawerFragment extends Fragment {
         return layout;
     }
 
+    /**
+     * Sets up the drawer layout
+     * @param drawerLayout the drawer layout to be set up
+     * @param toolbar the toolbar that is modified when the drawer is opened/closed (toggled)
+     */
     public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
         mDrawerLayout = drawerLayout;
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

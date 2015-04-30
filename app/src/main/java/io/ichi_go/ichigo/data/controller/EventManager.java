@@ -156,10 +156,18 @@ public class EventManager {
         myEvents.add(event);
     }
 
+    /**
+     * Edits the previous version of an event to a new version
+     * @param event the new version of an event
+     */
     public void editEvent(Event event) {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Deletes an event from the list of events
+     * @param event the event to be deleted
+     */
     public void deleteEvent(Event event) {
         StrictMode.ThreadPolicy policy = new
                 StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -210,10 +218,18 @@ public class EventManager {
         }
     }
 
+    /**
+     * Gets the username of the current user
+     * @return the username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets the username of a user (logs them in)
+     * @param username the username to be logged in
+     */
     public void setUsername(String username) {
         this.username = username;
     }
